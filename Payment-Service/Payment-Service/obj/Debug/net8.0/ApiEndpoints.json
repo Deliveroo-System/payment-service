@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "Payment_Service.Controllers.PaymentsController",
+    "Method": "CreatePayment",
+    "RelativePath": "api/payments/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Payment_Service.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",
