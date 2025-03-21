@@ -8,9 +8,25 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "amount",
-        "Type": "System.Decimal",
-        "IsRequired": false
+        "Name": "paymentRequest",
+        "Type": "Payment_Service.Models.PaymentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Payment_Service.Controllers.PaymentsController",
+    "Method": "GetPaymentStatus",
+    "RelativePath": "api/payments/status/{paymentId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paymentId",
+        "Type": "System.String",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
