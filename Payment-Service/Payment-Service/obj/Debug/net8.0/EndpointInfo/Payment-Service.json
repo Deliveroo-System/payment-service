@@ -10,13 +10,44 @@
         "tags": [
           "Payments"
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/payments/status/{paymentId}": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
         "parameters": [
           {
-            "name": "amount",
-            "in": "query",
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "number",
-              "format": "double"
+              "type": "string"
             }
           }
         ],
@@ -69,6 +100,16 @@
   },
   "components": {
     "schemas": {
+      "PaymentRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
       "WeatherForecast": {
         "type": "object",
         "properties": {

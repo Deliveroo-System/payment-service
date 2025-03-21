@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PayPal.Api;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -21,18 +22,54 @@ namespace Payment_Service.Service
         private APIContext GetAPIContext()
         {
             var config = new Dictionary<string, string> { { "mode", _mode } };
-            var accessToken = new OAuthTokenCredential(_clientId, _clientSecret, config).GetAccessToken();
-            return new APIContext(accessToken) { Config = config };
+
+            if (string.IsNullOrEmpty(_clientId) || string.IsNullOrEmpty(_clientSecret))
+            {
+                throw new ArgumentException("PayPal ClientId or ClientSecret is missing.");
+            }
+
+            try
+            {
+                // Attempt to retrieve the access token
+                var accessToken = new OAuthTokenCredential(_clientId, _clientSecret, config).GetAccessToken();
+
+                // Log the access token for verification
+                Console.WriteLine($"AccessToken: {accessToken}");
+
+                var apiContext = new APIContext(accessToken) { Config = config };
+
+                if (apiContext == null)
+                {
+                    throw new InvalidOperationException("Failed to create APIContext.");
+                }
+
+                return apiContext;
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the error (e.g., invalid credentials or network issue)
+                Console.WriteLine($"Error creating APIContext: {ex.Message}");
+                throw;
+            }
         }
 
-        public async Task<Payment> CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
+
+        public Payment CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
         {
-            var apiContext = GetAPIContext();
-            var payment = new Payment
+            try
             {
-                intent = "sale",
-                payer = new Payer { payment_method = "paypal" },
-                transactions = new List<Transaction>
+                var apiContext = GetAPIContext();
+
+                if (apiContext == null)
+                {
+                    throw new InvalidOperationException("APIContext is null.");
+                }
+
+                var payment = new Payment
+                {
+                    intent = "sale",
+                    payer = new Payer { payment_method = "paypal" },
+                    transactions = new List<Transaction>
             {
                 new Transaction
                 {
@@ -40,9 +77,25 @@ namespace Payment_Service.Service
                     description = "Food Order Payment"
                 }
             },
-                redirect_urls = new RedirectUrls { return_url = returnUrl, cancel_url = cancelUrl }
-            };
-            return await Task.Run(() => payment.Create(apiContext));
+                    redirect_urls = new RedirectUrls { return_url = returnUrl, cancel_url = cancelUrl }
+                };
+
+                // Call Create() directly (without async/await)
+                var createdPayment = payment.Create(apiContext);
+
+                return createdPayment;
+            }
+            catch (Exception ex)
+            {
+                // Log detailed error
+                Console.WriteLine($"Error during payment creation: {ex.Message}");
+                throw;
+            }
         }
+
+
+
+
+
     }
 }
