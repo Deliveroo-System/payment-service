@@ -1,32 +1,74 @@
 [
   {
-    "ContainingType": "Payment_Service.Controllers.PaymentsController",
-    "Method": "CreatePayment",
-    "RelativePath": "api/payments/create",
+    "ContainingType": "Payment_Service.Controllers.PaymentController",
+    "Method": "CapturePayPalPayment",
+    "RelativePath": "api/payment/capture-paypal/{paymentId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "paymentRequest",
-        "Type": "Payment_Service.Models.PaymentRequest",
+        "Name": "paymentId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Payment_Service.Controllers.PaymentController",
+    "Method": "CreatePayPalPayment",
+    "RelativePath": "api/payment/create-paypal",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "payment",
+        "Type": "Payment_Service.Models.Payment",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Payment_Service.Controllers.PaymentsController",
-    "Method": "GetPaymentStatus",
-    "RelativePath": "api/payments/status/{paymentId}",
-    "HttpMethod": "GET",
+    "ContainingType": "Payment_Service.Controllers.PayPalController",
+    "Method": "CapturePayment",
+    "RelativePath": "api/PayPal/capture-payment",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "paymentId",
+        "Name": "orderId",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Payment_Service.Controllers.PayPalController",
+    "Method": "CreateOrder",
+    "RelativePath": "api/PayPal/create-order",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "currency",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

@@ -1,101 +1,133 @@
 ﻿using System;
-using System.Collections.Generic;
-using PayPal.Api;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using PayPalCheckoutSdk.Core;
+using PayPalCheckoutSdk.Orders;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace Payment_Service.Service
 {
     public class PayPalService
     {
-        private readonly string _clientId;
-        private readonly string _clientSecret;
-        private readonly string _mode;
+        private readonly IConfiguration _config;
+        private readonly ILogger<PayPalService> _logger;
 
-        public PayPalService(IConfiguration config)
+        public PayPalService(IConfiguration config, ILogger<PayPalService> logger)
         {
-            _clientId = config["PayPal:ClientId"];
-            _clientSecret = config["PayPal:ClientSecret"];
-            _mode = config["PayPal:Mode"];
+            _config = config;
+            _logger = logger;
         }
 
-        private APIContext GetAPIContext()
+        private PayPalEnvironment GetPayPalEnvironment()
         {
-            var config = new Dictionary<string, string> { { "mode", _mode } };
+            string clientId = _config["PayPal:ClientId"];
+            string clientSecret = _config["PayPal:ClientSecret"];
+            string mode = _config["PayPal:Mode"]; // "sandbox" or "live"
 
-            if (string.IsNullOrEmpty(_clientId) || string.IsNullOrEmpty(_clientSecret))
+            if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
             {
-                throw new ArgumentException("PayPal ClientId or ClientSecret is missing.");
+                _logger.LogError("PayPal credentials are missing.");
+                throw new Exception("PayPal credentials are missing.");
             }
 
-            try
+            if (mode != "sandbox" && mode != "live")
             {
-                // Attempt to retrieve the access token
-                var accessToken = new OAuthTokenCredential(_clientId, _clientSecret, config).GetAccessToken();
-
-                // Log the access token for verification
-                Console.WriteLine($"AccessToken: {accessToken}");
-
-                var apiContext = new APIContext(accessToken) { Config = config };
-
-                if (apiContext == null)
-                {
-                    throw new InvalidOperationException("Failed to create APIContext.");
-                }
-
-                return apiContext;
+                _logger.LogError("Invalid PayPal mode. It should be 'sandbox' or 'live'.");
+                throw new Exception("Invalid PayPal mode. It should be 'sandbox' or 'live'.");
             }
-            catch (Exception ex)
-            {
-                // Log or handle the error (e.g., invalid credentials or network issue)
-                Console.WriteLine($"Error creating APIContext: {ex.Message}");
-                throw;
-            }
+
+            return mode == "sandbox"
+                ? new SandboxEnvironment(clientId, clientSecret)
+                : new LiveEnvironment(clientId, clientSecret);
         }
 
 
-        public Payment CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
+        private PayPalHttpClient GetPayPalClient()
+        {
+            return new PayPalHttpClient(GetPayPalEnvironment());
+        }
+
+        public async Task<string> CreatePayPalOrder(decimal amount, string currency)
         {
             try
             {
-                var apiContext = GetAPIContext();
+                var request = new OrdersCreateRequest();
+                request.Prefer("return=representation");
 
-                if (apiContext == null)
+                var orderRequest = new OrderRequest()
                 {
-                    throw new InvalidOperationException("APIContext is null.");
-                }
-
-                var payment = new Payment
-                {
-                    intent = "sale",
-                    payer = new Payer { payment_method = "paypal" },
-                    transactions = new List<Transaction>
+                    CheckoutPaymentIntent = "CAPTURE",
+                    PurchaseUnits = new List<PurchaseUnitRequest>
             {
-                new Transaction
+                new PurchaseUnitRequest
                 {
-                    amount = new Amount { total = amount.ToString("F2"), currency = currency },
-                    description = "Food Order Payment"
+                    AmountWithBreakdown = new AmountWithBreakdown
+                    {
+                        CurrencyCode = currency,
+                        Value = amount.ToString("F2")
+                    }
                 }
-            },
-                    redirect_urls = new RedirectUrls { return_url = returnUrl, cancel_url = cancelUrl }
+            }
                 };
 
-                // Call Create() directly (without async/await)
-                var createdPayment = payment.Create(apiContext);
+                request.RequestBody(orderRequest);
 
-                return createdPayment;
+                var client = GetPayPalClient();
+                var response = await client.Execute(request);
+
+                if (response.StatusCode != System.Net.HttpStatusCode.OK || response.Result<Order>() == null)
+                {
+                    var responseBody = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+                    _logger.LogError($"Failed to create PayPal order. Response Status: {response.StatusCode}, Body: {responseBody}");
+                    throw new Exception($"PayPal order creation failed. Response status: {response.StatusCode}. Response: {responseBody}");
+                }
+
+                var result = response.Result<Order>();
+                _logger.LogInformation($"PayPal order created successfully. Order ID: {result.Id}");
+                return result.Id;
             }
             catch (Exception ex)
             {
-                // Log detailed error
-                Console.WriteLine($"Error during payment creation: {ex.Message}");
-                throw;
+                _logger.LogError($"Error creating PayPal order: {ex.Message}", ex);
+                throw new Exception("Error creating PayPal order.", ex);
             }
         }
 
 
 
 
+        public async Task<string> CapturePayPalPayment(string orderId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(orderId))
+                {
+                    _logger.LogError("PayPal Order ID is null or empty.");
+                    throw new ArgumentException("PayPal Order ID cannot be null or empty.");
+                }
 
+                var request = new OrdersCaptureRequest(orderId);
+                request.RequestBody(new OrderActionRequest());
+
+                var client = GetPayPalClient();
+                var response = await client.Execute(request);
+                var result = response.Result<Order>();
+
+                if (result == null)
+                {
+                    _logger.LogError("PayPal capture response result is null.");
+                    throw new Exception("Failed to capture PayPal payment.");
+                }
+
+                _logger.LogInformation($"PayPal payment captured. Order ID: {orderId}, Status: {result.Status}");
+                return result.Status; // Should return "COMPLETED" if successful
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error capturing PayPal payment: {ex.Message}", ex);
+                throw new Exception("Error capturing PayPal payment.", ex);
+            }
+        }
     }
 }

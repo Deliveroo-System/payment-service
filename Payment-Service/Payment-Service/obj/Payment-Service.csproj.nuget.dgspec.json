@@ -50,6 +50,16 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[8.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.3, )"
@@ -64,13 +74,21 @@
               "target": "Package",
               "version": "[1.21.2, )"
             },
-            "PayPal": {
+            "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[1.9.1, )"
+              "version": "[13.0.3, )"
+            },
+            "PayPal.SDK.NETCore": {
+              "target": "Package",
+              "version": "[1.9.1.2, )"
+            },
+            "PayPalCheckoutSdk": {
+              "target": "Package",
+              "version": "[1.0.4, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[7.3.1, )"
+              "version": "[8.0.0, )"
             }
           },
           "imports": [

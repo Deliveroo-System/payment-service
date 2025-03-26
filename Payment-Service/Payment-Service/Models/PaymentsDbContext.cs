@@ -1,53 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Payment_Service.Models;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Payment_Service.Models;
 
 namespace Payment_Service.Models
 {
     public partial class PaymentsDbContext : DbContext
     {
-        private readonly IConfiguration _configuration;
-
-        public PaymentsDbContext(DbContextOptions<PaymentsDbContext> options, IConfiguration configuration)
+        public PaymentsDbContext(DbContextOptions<PaymentsDbContext> options)
             : base(options)
         {
-            _configuration = configuration;
         }
 
-        public virtual DbSet<Payment> Payments { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                string connectionString = _configuration.GetConnectionString("DefaultConnection");
-                optionsBuilder.UseSqlServer(connectionString);
-            }
-        }
+        // DbSets representing your tables
+        public virtual DbSet<Payment> Payment { get; set; }
+        public virtual DbSet<PaymentTransaction> PaymentTransactions { get; set; }
+        public virtual DbSet<PaymentPaypalTransaction> PaymentPaypalTransactions { get; set; }
+        public virtual DbSet<PaymentCODTransaction> PaymentCODTransactions { get; set; }
+        public virtual DbSet<PaymentRefund> PaymentRefunds { get; set; }
+        public virtual DbSet<PaymentLog> PaymentLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Payment>(entity =>
+           
+            modelBuilder.Entity<PaymentPaypalTransaction>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK__Payments__3214EC07D22DF512");
+                entity.HasKey(e => e.TransactionId).HasName("PK_PaymentPaypalTransaction");
 
-                entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
-                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-                entity.Property(e => e.Currency)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-                entity.Property(e => e.PaymentId)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-                entity.Property(e => e.Status)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.TransactionAmount)
+                    .HasColumnType("decimal(10,2)");
+
+                entity.Property(e => e.TransactionCurrency)
+                    .HasMaxLength(3);
+
+                entity.Property(e => e.TransactionStatus)
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.PayPalTransactionId)
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime");
+
+                entity.HasOne(e => e.Payment)
+                    .WithMany()
+                    .HasForeignKey(e => e.PaymentId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
+          
             OnModelCreatingPartial(modelBuilder);
         }
 
+        
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

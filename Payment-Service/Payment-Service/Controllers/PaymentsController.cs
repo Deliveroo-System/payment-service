@@ -2,73 +2,100 @@
 using Microsoft.EntityFrameworkCore;
 using Payment_Service.Models;
 using Payment_Service.Service;
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Payment_Service.Controllers
 {
-    [Route("api/payments")]
+    [Route("api/payment")]
     [ApiController]
-    public class PaymentsController : ControllerBase
+    public class PaymentController : ControllerBase
     {
+        private readonly PaymentsDbContext _context;
         private readonly PayPalService _payPalService;
-        private readonly PaymentsDbContext _dbContext; // Injected DbContext
+        private readonly ILogger<PaymentController> _logger;
 
-        public PaymentsController(PayPalService payPalService, PaymentsDbContext dbContext)
+        public PaymentController(PaymentsDbContext context, PayPalService payPalService, ILogger<PaymentController> logger)
         {
+            _context = context;
             _payPalService = payPalService;
-            _dbContext = dbContext;
+            _logger = logger;
         }
 
-        [HttpPost("create")]
-        public IActionResult CreatePayment([FromBody] PaymentRequest paymentRequest)
+        [HttpPost("create-paypal")]
+        public async Task<IActionResult> CreatePayPalPayment([FromBody] Payment payment)
         {
+            if (payment.PaymentMethod != "PAYPAL")
+                return BadRequest("Invalid payment method.");
+
+            if (payment.TotalAmount <= 0)
+                return BadRequest("Total amount must be greater than zero.");
+
+            if (payment.UserId == Guid.Empty)
+            {
+                payment.UserId = Guid.NewGuid();  // Generate a new GUID if not provided
+                _logger.LogInformation($"Generated new userId: {payment.UserId}");
+            }
+
             try
             {
-                if (paymentRequest.Amount <= 0)
-                {
-                    return BadRequest(new { message = "Invalid payment amount." });
-                }
+                var payPalOrderId = await _payPalService.CreatePayPalOrder(payment.TotalAmount, payment.Currency);
+                _logger.LogInformation($"PayPal Order Created: {payPalOrderId}");
 
-                // Pass the decimal Amount to the PayPal service, it will be converted to a string
-                var payment = _payPalService.CreatePayment(paymentRequest.Amount, "USD", "https://yourfrontend.com/success", "https://yourfrontend.com/cancel");
+                payment.PaymentStatus = "PENDING";
+                payment.OrderId = payPalOrderId;
+                _context.Payment.Add(payment);
+                await _context.SaveChangesAsync();
 
-                // Save payment details to the database
-                var paymentRecord = new Payment
-                {
-                    PaymentId = payment.id,
-                    Amount = paymentRequest.Amount,
-                    Currency = "USD",  // Assuming USD, adjust as necessary
-                    Status = "Created",  // Initial status, should be updated later
-                    CreatedAt = DateTime.UtcNow // Store the creation timestamp
-                };
-
-                _dbContext.Payments.Add(paymentRecord);
-                _dbContext.SaveChanges();
-
-                return Ok(new { paymentId = payment.id, approvalUrl = payment.GetApprovalUrl() });
+                return Ok(new { PaymentId = payment.PaymentId, PayPalOrderId = payPalOrderId, UserId = payment.UserId });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while processing the payment.", details = ex.Message });
+                _logger.LogError($"Error creating PayPal order: {ex.Message}", ex);
+                return StatusCode(500, "Error creating PayPal order.");
             }
         }
 
 
 
-        [HttpGet("status/{paymentId}")]
-        public async Task<IActionResult> GetPaymentStatus(string paymentId)
+
+
+        [HttpPost("capture-paypal/{paymentId}")]
+        public async Task<IActionResult> CapturePayPalPayment(Guid paymentId, [FromQuery] string orderId)
         {
-            var payment = await _dbContext.Payments.FirstOrDefaultAsync(p => p.PaymentId == paymentId);
+            if (string.IsNullOrWhiteSpace(orderId))
+                return BadRequest("Invalid PayPal Order ID.");
+
+            orderId = orderId.Trim(); // Ensure no newline or extra spaces
+
+            var payment = await _context.Payment.FindAsync(paymentId);
             if (payment == null)
+                return NotFound("Payment not found.");
+
+            try
             {
-                return NotFound(new { message = "Payment not found" });
+                var status = await _payPalService.CapturePayPalPayment(orderId);
+                _logger.LogInformation($"PayPal Capture Response: OrderID {orderId}, Status {status}");
+
+                payment.PaymentStatus = status == "COMPLETED" ? "COMPLETED" : "FAILED";
+
+                // Add payment log entry
+                _context.PaymentLogs.Add(new PaymentLog
+                {
+                    PaymentId = paymentId,
+                    ActionType = status == "COMPLETED" ? "PAYMENT_COMPLETED" : "PAYMENT_FAILED",
+                    LogMessage = $"PayPal transaction status: {status}"
+                });
+
+                await _context.SaveChangesAsync();
+                return Ok(new { PaymentId = paymentId, Status = status });
             }
-
-            // Update payment status after verification (for simplicity, using "Completed" here)
-            payment.Status = "Completed";
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(payment);
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error capturing PayPal payment: {ex.Message}");
+                return StatusCode(500, "Error capturing PayPal payment.");
+            }
         }
-
     }
 }
