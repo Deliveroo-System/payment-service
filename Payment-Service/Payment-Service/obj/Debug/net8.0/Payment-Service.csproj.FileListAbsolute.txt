@@ -171,10 +171,10 @@ C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\ne
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Payment-Service.props
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Payment-Service.props
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\Payment-.D4E3BD49.Up2Date
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\Payment-Service.dll
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\refint\Payment-Service.dll
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\Payment-Service.pdb
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\Payment-Service.genruntimeconfig.cache
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\ref\Payment-Service.dll
+C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

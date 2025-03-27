@@ -1,6 +1,7 @@
-﻿using System;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Payment_Service.Models;
 
 namespace Payment_Service.Models
 {
@@ -9,11 +10,11 @@ namespace Payment_Service.Models
         [Key]
         public Guid TransactionId { get; set; } = Guid.NewGuid();
 
-        [Required]
-        public Guid PaymentId { get; set; }
+        [ForeignKey("PaymentId")]
+        public  Guid PaymentId { get; set; }
 
         [MaxLength(255)]
-        public string? GatewayTransactionId { get; set; } // Only for PayPal
+        public string GatewayTransactionId { get; set; } // Only for PayPal
 
         [Required]
         [MaxLength(20)]
@@ -21,7 +22,6 @@ namespace Payment_Service.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [ForeignKey("PaymentId")]
-        public Payment Payment { get; set; }
+        
     }
 }

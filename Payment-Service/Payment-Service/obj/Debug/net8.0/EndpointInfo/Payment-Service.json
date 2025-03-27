@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/payment/create-paypal": {
+    "/api/payments/create": {
       "post": {
         "tags": [
           "Payment"
@@ -36,29 +36,30 @@
         }
       }
     },
-    "/api/payment/capture-paypal/{paymentId}": {
+    "/api/payments/pay/paypal": {
       "post": {
         "tags": [
           "Payment"
         ],
-        "parameters": [
-          {
-            "name": "paymentId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "orderId",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -66,49 +67,30 @@
         }
       }
     },
-    "/api/PayPal/create-order": {
+    "/api/payments/pay/cod": {
       "post": {
         "tags": [
-          "PayPal"
+          "Payment"
         ],
-        "parameters": [
-          {
-            "name": "amount",
-            "in": "query",
-            "schema": {
-              "type": "number",
-              "format": "double"
-            }
-          },
-          {
-            "name": "currency",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/PayPal/capture-payment": {
-      "post": {
-        "tags": [
-          "PayPal"
-        ],
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "query",
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Payment"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -167,7 +149,7 @@
           },
           "orderId": {
             "type": "string",
-            "nullable": true
+            "format": "uuid"
           },
           "userId": {
             "type": "string",

@@ -1,29 +1,8 @@
 [
   {
     "ContainingType": "Payment_Service.Controllers.PaymentController",
-    "Method": "CapturePayPalPayment",
-    "RelativePath": "api/payment/capture-paypal/{paymentId}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "paymentId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "orderId",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Payment_Service.Controllers.PaymentController",
-    "Method": "CreatePayPalPayment",
-    "RelativePath": "api/payment/create-paypal",
+    "Method": "CreatePayment",
+    "RelativePath": "api/payments/create",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -37,38 +16,33 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Payment_Service.Controllers.PayPalController",
-    "Method": "CapturePayment",
-    "RelativePath": "api/PayPal/capture-payment",
+    "ContainingType": "Payment_Service.Controllers.PaymentController",
+    "Method": "PayWithCOD",
+    "RelativePath": "api/payments/pay/cod",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "orderId",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "payment",
+        "Type": "Payment_Service.Models.Payment",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Payment_Service.Controllers.PayPalController",
-    "Method": "CreateOrder",
-    "RelativePath": "api/PayPal/create-order",
+    "ContainingType": "Payment_Service.Controllers.PaymentController",
+    "Method": "PayWithPayPal",
+    "RelativePath": "api/payments/pay/paypal",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "amount",
-        "Type": "System.Decimal",
-        "IsRequired": false
-      },
-      {
-        "Name": "currency",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "payment",
+        "Type": "Payment_Service.Models.Payment",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

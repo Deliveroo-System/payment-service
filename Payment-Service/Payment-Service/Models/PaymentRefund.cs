@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Payment_Service.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

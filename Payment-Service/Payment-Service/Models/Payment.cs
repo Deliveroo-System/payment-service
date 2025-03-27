@@ -1,6 +1,7 @@
-﻿using System;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Payment_Service.Models;
 
 namespace Payment_Service.Models
 {
@@ -9,10 +10,10 @@ namespace Payment_Service.Models
     {
         [Key]
         [Column("payment_id")]
-        public Guid PaymentId { get; set; }
+        public Guid PaymentId { get; set; } = Guid.NewGuid();
 
         [Column("order_id")]
-        public string? OrderId { get; set; }
+        public Guid OrderId { get; set; }
 
         [Column("user_id")]
         public Guid UserId { get; set; }

@@ -1,7 +1,7 @@
-﻿namespace Payment_Service.Models
-{
-    public class PaymentRequest
-    {
-        public decimal Amount { get; set; }
-    }
-}
+﻿//namespace Payment_Service.Models
+//{
+//    public class PaymentRequest
+//    {
+//        public decimal Amount { get; set; }
+//    }
+//}
