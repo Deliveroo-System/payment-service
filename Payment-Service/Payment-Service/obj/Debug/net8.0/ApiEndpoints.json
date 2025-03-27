@@ -1,6 +1,6 @@
 [
   {
-    "ContainingType": "Payment_Service.Controllers.PaymentsController",
+    "ContainingType": "Payment_Service.Controllers.PaymentController",
     "Method": "CreatePayment",
     "RelativePath": "api/payments/create",
     "HttpMethod": "POST",
@@ -8,24 +8,40 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "paymentRequest",
-        "Type": "Payment_Service.Models.PaymentRequest",
+        "Name": "payment",
+        "Type": "Payment_Service.Models.Payment",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Payment_Service.Controllers.PaymentsController",
-    "Method": "GetPaymentStatus",
-    "RelativePath": "api/payments/status/{paymentId}",
-    "HttpMethod": "GET",
+    "ContainingType": "Payment_Service.Controllers.PaymentController",
+    "Method": "PayWithCOD",
+    "RelativePath": "api/payments/pay/cod",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "paymentId",
-        "Type": "System.String",
+        "Name": "payment",
+        "Type": "Payment_Service.Models.Payment",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Payment_Service.Controllers.PaymentController",
+    "Method": "PayWithPayPal",
+    "RelativePath": "api/payments/pay/paypal",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "payment",
+        "Type": "Payment_Service.Models.Payment",
         "IsRequired": true
       }
     ],

@@ -1,53 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Payment_Service.Models;
+
+
 
 namespace Payment_Service.Models
 {
     public partial class PaymentsDbContext : DbContext
     {
-        private readonly IConfiguration _configuration;
+        public PaymentsDbContext(DbContextOptions<PaymentsDbContext> options) : base(options) { }
 
-        public PaymentsDbContext(DbContextOptions<PaymentsDbContext> options, IConfiguration configuration)
-            : base(options)
-        {
-            _configuration = configuration;
-        }
-
-        public virtual DbSet<Payment> Payments { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                string connectionString = _configuration.GetConnectionString("DefaultConnection");
-                optionsBuilder.UseSqlServer(connectionString);
-            }
-        }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
+        public DbSet<PaymentPaypalTransaction> PaymentPaypalTransactions { get; set; }
+        public DbSet<PaymentCODTransaction> PaymentCodTransactions { get; set; }
+        public DbSet<PaymentRefund> PaymentRefunds { get; set; }
+        public DbSet<PaymentLog> PaymentLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Payment>(entity =>
-            {
-                entity.HasKey(e => e.Id).HasName("PK__Payments__3214EC07D22DF512");
+            modelBuilder.Entity<Payment>()
+                .Property(p => p.TotalAmount)
+                .HasPrecision(18, 2); // Ensures decimal precision
 
-                entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
-                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-                entity.Property(e => e.Currency)
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
-                entity.Property(e => e.PaymentId)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-                entity.Property(e => e.Status)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
-            OnModelCreatingPartial(modelBuilder);
+            modelBuilder.Entity<PaymentPaypalTransaction>()
+                .Property(p => p.TransactionAmount)
+                .HasPrecision(18, 2); // Ensures decimal precision
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
+
+

@@ -1,74 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Payment_Service.Models;
+using PayPal.Api;
+using Payment_Service.Controllers;
 using Payment_Service.Service;
+
+// Alias for Payment classes
+using LocalPayment = Payment_Service.Models.Payment;
+using PayPalPayment = PayPal.Api.Payment;
 
 namespace Payment_Service.Controllers
 {
     [Route("api/payments")]
     [ApiController]
-    public class PaymentsController : ControllerBase
+    public class PaymentController : ControllerBase
     {
+        private readonly PaymentsDbContext _context;
         private readonly PayPalService _payPalService;
-        private readonly PaymentsDbContext _dbContext; // Injected DbContext
 
-        public PaymentsController(PayPalService payPalService, PaymentsDbContext dbContext)
+        public PaymentController(PaymentsDbContext context, PayPalService payPalService)
         {
+            _context = context;
             _payPalService = payPalService;
-            _dbContext = dbContext;
         }
 
+        // Create a new payment
         [HttpPost("create")]
-        public IActionResult CreatePayment([FromBody] PaymentRequest paymentRequest)
+        public IActionResult CreatePayment([FromBody] LocalPayment payment)
         {
-            try
-            {
-                if (paymentRequest.Amount <= 0)
-                {
-                    return BadRequest(new { message = "Invalid payment amount." });
-                }
-
-                // Pass the decimal Amount to the PayPal service, it will be converted to a string
-                var payment = _payPalService.CreatePayment(paymentRequest.Amount, "USD", "https://yourfrontend.com/success", "https://yourfrontend.com/cancel");
-
-                // Save payment details to the database
-                var paymentRecord = new Payment
-                {
-                    PaymentId = payment.id,
-                    Amount = paymentRequest.Amount,
-                    Currency = "USD",  // Assuming USD, adjust as necessary
-                    Status = "Created",  // Initial status, should be updated later
-                    CreatedAt = DateTime.UtcNow // Store the creation timestamp
-                };
-
-                _dbContext.Payments.Add(paymentRecord);
-                _dbContext.SaveChanges();
-
-                return Ok(new { paymentId = payment.id, approvalUrl = payment.GetApprovalUrl() });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while processing the payment.", details = ex.Message });
-            }
-        }
-
-
-
-        [HttpGet("status/{paymentId}")]
-        public async Task<IActionResult> GetPaymentStatus(string paymentId)
-        {
-            var payment = await _dbContext.Payments.FirstOrDefaultAsync(p => p.PaymentId == paymentId);
-            if (payment == null)
-            {
-                return NotFound(new { message = "Payment not found" });
-            }
-
-            // Update payment status after verification (for simplicity, using "Completed" here)
-            payment.Status = "Completed";
-            await _dbContext.SaveChangesAsync();
-
+            _context.Payments.Add(payment);
+            _context.SaveChanges();
             return Ok(payment);
         }
 
+        // Pay with PayPal
+        [HttpPost("pay/paypal")]
+        public IActionResult PayWithPayPal([FromBody] LocalPayment payment)
+        {
+            var paypalPayment = _payPalService.CreatePayment(payment.TotalAmount, payment.Currency,
+                "http://localhost:5212/api/payments/execute",
+                "http://localhost:5212/api/payments/cancel");
+            return Ok(paypalPayment);
+        }
+
+        // Pay with Cash on Delivery
+        [HttpPost("pay/cod")]
+        public IActionResult PayWithCOD([FromBody] LocalPayment payment)
+        {
+            payment.PaymentStatus = "PENDING";
+            _context.Payments.Add(payment);
+            _context.SaveChanges();
+            return Ok(new { message = "Cash on Delivery payment initiated", payment });
+        }
     }
 }

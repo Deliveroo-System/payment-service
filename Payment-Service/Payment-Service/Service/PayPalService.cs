@@ -1,101 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Payment_Service.Service;
 using PayPal.Api;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+
 
 namespace Payment_Service.Service
 {
     public class PayPalService
     {
-        private readonly string _clientId;
-        private readonly string _clientSecret;
-        private readonly string _mode;
+        private readonly IConfiguration _config;
 
         public PayPalService(IConfiguration config)
         {
-            _clientId = config["PayPal:ClientId"];
-            _clientSecret = config["PayPal:ClientSecret"];
-            _mode = config["PayPal:Mode"];
+            _config = config;
         }
 
-        private APIContext GetAPIContext()
+        public APIContext GetAPIContext()
         {
-            var config = new Dictionary<string, string> { { "mode", _mode } };
+            var clientId = _config["PayPal:ClientId"];
+            var clientSecret = _config["PayPal:ClientSecret"];
+            var config = new Dictionary<string, string> { { "mode", _config["PayPal:Mode"] } };
 
-            if (string.IsNullOrEmpty(_clientId) || string.IsNullOrEmpty(_clientSecret))
-            {
-                throw new ArgumentException("PayPal ClientId or ClientSecret is missing.");
-            }
-
-            try
-            {
-                // Attempt to retrieve the access token
-                var accessToken = new OAuthTokenCredential(_clientId, _clientSecret, config).GetAccessToken();
-
-                // Log the access token for verification
-                Console.WriteLine($"AccessToken: {accessToken}");
-
-                var apiContext = new APIContext(accessToken) { Config = config };
-
-                if (apiContext == null)
-                {
-                    throw new InvalidOperationException("Failed to create APIContext.");
-                }
-
-                return apiContext;
-            }
-            catch (Exception ex)
-            {
-                // Log or handle the error (e.g., invalid credentials or network issue)
-                Console.WriteLine($"Error creating APIContext: {ex.Message}");
-                throw;
-            }
+            var accessToken = new OAuthTokenCredential(clientId, clientSecret, config).GetAccessToken();
+            return new APIContext(accessToken) { Config = config };
         }
-
 
         public Payment CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
         {
-            try
+            var apiContext = GetAPIContext();
+            var payment = new Payment
             {
-                var apiContext = GetAPIContext();
-
-                if (apiContext == null)
-                {
-                    throw new InvalidOperationException("APIContext is null.");
-                }
-
-                var payment = new Payment
-                {
-                    intent = "sale",
-                    payer = new Payer { payment_method = "paypal" },
-                    transactions = new List<Transaction>
+                intent = "sale",
+                payer = new Payer { payment_method = "paypal" },
+                transactions = new List<Transaction>
             {
                 new Transaction
                 {
-                    amount = new Amount { total = amount.ToString("F2"), currency = currency },
+                    amount = new Amount { total = amount.ToString(), currency = currency },
                     description = "Food Order Payment"
                 }
             },
-                    redirect_urls = new RedirectUrls { return_url = returnUrl, cancel_url = cancelUrl }
-                };
+                redirect_urls = new RedirectUrls { return_url = returnUrl, cancel_url = cancelUrl }
+            };
 
-                // Call Create() directly (without async/await)
-                var createdPayment = payment.Create(apiContext);
-
-                return createdPayment;
-            }
-            catch (Exception ex)
-            {
-                // Log detailed error
-                Console.WriteLine($"Error during payment creation: {ex.Message}");
-                throw;
-            }
+            return payment.Create(apiContext);
         }
-
-
-
-
-
     }
 }
