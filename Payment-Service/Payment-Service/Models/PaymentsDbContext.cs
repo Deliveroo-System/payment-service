@@ -20,11 +20,18 @@ namespace Payment_Service.Models
         {
             modelBuilder.Entity<Payment>()
                 .Property(p => p.TotalAmount)
-                .HasPrecision(18, 2); // Ensures decimal precision
+                .HasPrecision(18, 2); 
 
             modelBuilder.Entity<PaymentPaypalTransaction>()
                 .Property(p => p.TransactionAmount)
-                .HasPrecision(18, 2); // Ensures decimal precision
+                .HasPrecision(18, 2); 
+
+            modelBuilder.Entity<PaymentCODTransaction>()
+                .ToTable("payment_cod_transactions")  
+                .HasOne(cod => cod.Payment)
+                .WithMany()  
+                .HasForeignKey(cod => cod.PaymentId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
