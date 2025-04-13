@@ -1,7 +1,7 @@
-﻿using Payment_Service.Service;
-using PayPal.Api;
+﻿using PayPal.Api;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace Payment_Service.Service
 {
@@ -16,52 +16,54 @@ namespace Payment_Service.Service
 
         public APIContext GetAPIContext()
         {
-            try
+            var clientId = _config["PayPal:ClientId"];
+            var clientSecret = _config["PayPal:ClientSecret"];
+            var config = new Dictionary<string, string>
             {
-                var clientId = _config["PayPal:ClientId"];
-                var clientSecret = _config["PayPal:ClientSecret"];
-                var config = new Dictionary<string, string>
-                {
-                    { "mode", _config["PayPal:Mode"] }
-                };
+                { "mode", _config["PayPal:Mode"] }
+            };
 
-                var accessToken = new OAuthTokenCredential(clientId, clientSecret, config).GetAccessToken();
-                return new APIContext(accessToken) { Config = config };
-            }
-            catch (Exception ex)
-            {
-                // Handle any errors related to access token retrieval
-                throw new Exception("Error retrieving PayPal access token.", ex);
-            }
+            var accessToken = new OAuthTokenCredential(clientId, clientSecret, config).GetAccessToken();
+            return new APIContext(accessToken) { Config = config };
         }
 
         public Payment CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
         {
-            try
-            {
-                var apiContext = GetAPIContext();
-                var payment = new Payment
-                {
-                    intent = "sale",
-                    payer = new Payer { payment_method = "paypal" },
-                    transactions = new List<Transaction>
-                    {
-                        new Transaction
-                        {
-                            amount = new Amount { total = amount.ToString(), currency = currency },
-                            description = "Food Order Payment"
-                        }
-                    },
-                    redirect_urls = new RedirectUrls { return_url = returnUrl, cancel_url = cancelUrl }
-                };
+            var apiContext = GetAPIContext();
 
-                return payment.Create(apiContext);
-            }
-            catch (Exception ex)
+            var payment = new Payment
             {
-                // Handle errors during payment creation
-                throw new Exception("Error creating PayPal payment.", ex);
-            }
+                intent = "sale",
+                payer = new Payer { payment_method = "paypal" },
+                transactions = new List<Transaction>
+                {
+                    new Transaction
+                    {
+                        amount = new Amount
+                        {
+                            total = amount.ToString("F2"),
+                            currency = currency
+                        },
+                        description = "Food Order Payment"
+                    }
+                },
+                redirect_urls = new RedirectUrls
+                {
+                    return_url = returnUrl,
+                    cancel_url = cancelUrl
+                }
+            };
+
+            return payment.Create(apiContext);
+        }
+
+        public Payment ExecutePayment(string paymentId, string payerId)
+        {
+            var apiContext = GetAPIContext();
+            var paymentExecution = new PaymentExecution { payer_id = payerId };
+            var payment = new Payment { id = paymentId };
+
+            return payment.Execute(apiContext, paymentExecution);
         }
     }
 }

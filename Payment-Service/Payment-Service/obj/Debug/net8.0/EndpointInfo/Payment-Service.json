@@ -8,7 +8,7 @@
     "/api/payments/create": {
       "post": {
         "tags": [
-          "Payment"
+          "Payments"
         ],
         "requestBody": {
           "content": {
@@ -39,7 +39,7 @@
     "/api/payments/pay/paypal": {
       "post": {
         "tags": [
-          "Payment"
+          "Payments"
         ],
         "requestBody": {
           "content": {
@@ -70,7 +70,7 @@
     "/api/payments/pay/cod": {
       "post": {
         "tags": [
-          "Payment"
+          "Payments"
         ],
         "requestBody": {
           "content": {
