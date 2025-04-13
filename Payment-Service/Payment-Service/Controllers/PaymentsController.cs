@@ -52,17 +52,52 @@ namespace Payment_Service.Controllers
         {
             try
             {
+                // Step 1: Save Payment to DB
+                payment.OrderId = Guid.Parse("11111111-1111-1111-1111-111111111122");
+                payment.UserId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+                payment.PaymentStatus = "PENDING";
+                payment.CreatedAt = DateTime.UtcNow;
+                payment.UpdatedAt = DateTime.UtcNow;
+
+                _context.Payments.Add(payment);
+                _context.SaveChanges();  // Save to get PaymentId
+
+                // Step 2: Call PayPal service to create payment (fake or real)
                 var paypalPayment = _payPalService.CreatePayment(payment.TotalAmount, payment.Currency,
                     "http://localhost:5212/api/payments/execute",
                     "http://localhost:5212/api/payments/cancel");
 
-                return Ok(new { message = "PayPal payment initiated", paypalPayment });
+                // Step 3: Save PayPal Transaction
+                var paypalTransaction = new PaymentPaypalTransaction
+                {
+                    PaymentId = payment.PaymentId,
+                    PayPalTransactionId = paypalPayment.id,
+                    TransactionStatus = "SUCCESS",  // ✅ Use allowed value
+                    TransactionAmount = payment.TotalAmount,
+                    TransactionCurrency = payment.Currency,
+                    CreatedAt = DateTime.UtcNow
+                };
+                _context.PaymentPaypalTransactions.Add(paypalTransaction);
+                _context.SaveChanges();
+
+                return Ok(new
+                {
+                    message = "PayPal payment initiated",
+                    payment,
+                    paypalTransaction
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while processing PayPal payment", error = ex.Message });
+                return StatusCode(500, new
+                {
+                    message = "An error occurred while processing PayPal payment",
+                    error = ex.Message,
+                    innerException = ex.InnerException?.Message
+                });
             }
         }
+
 
         [HttpPost("pay/cod")]
         public IActionResult PayWithCOD([FromBody] LocalPayment payment)
