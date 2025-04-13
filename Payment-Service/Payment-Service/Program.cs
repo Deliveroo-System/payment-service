@@ -9,6 +9,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors();
+
 // Register DbContext with the appropriate scope (no need for AddScoped separately)
 builder.Services.AddDbContext<PaymentsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -25,11 +27,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 
+
+
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
+//app.UseHttpsRedirection();
+
+
+
+app.UseRouting();
 app.UseAuthorization();
-
 app.MapControllers();
+
+//app.UseHttpsRedirection();
 
 if (app.Environment.IsDevelopment())
 {
