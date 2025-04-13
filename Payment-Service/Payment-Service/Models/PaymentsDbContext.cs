@@ -32,6 +32,14 @@ namespace Payment_Service.Models
                 .WithMany()  
                 .HasForeignKey(cod => cod.PaymentId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PaymentPaypalTransaction>()
+                .ToTable("payment_paypal_transactions") 
+                .HasOne(p => p.Payment)
+                .WithMany()
+                .HasForeignKey(p => p.PaymentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }
