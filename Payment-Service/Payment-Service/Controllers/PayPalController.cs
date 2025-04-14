@@ -1,98 +1,52 @@
-﻿//using Microsoft.AspNetCore.Mvc;
-//using Payment_Service.Models;
-//using Payment_Service.Service;
-//using System;
-//using System.Linq;
+﻿using PayPalCheckoutSdk.Core;
+using PayPalCheckoutSdk.Orders;
+using PayPalHttp; // correct!
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-//using LocalPayment = Payment_Service.Models.Payment;
+namespace Payment_Service.Controller
+{
+    public class PayPalService
+    {
+        private readonly PayPalEnvironment _environment;
+        private readonly PayPalHttpClient _client;
 
-//namespace Payment_Service.Controllers
-//{
-//    [Route("api/payments")]
-//    [ApiController]
-//    public class PaymentController : ControllerBase
-//    {
-//        private readonly PaymentsDbContext _context;
-//        private readonly PayPalService _payPalService;
+        public PayPalService()
+        {
+            _environment = new SandboxEnvironment("Aacd_SPuODUux_H7x6evbTSojfds_jToSXaUD4SegYNJE5CM91OWuqbb1-qwkvnEdpMC_YW8zxZGxMdt", "EFXBHqmf1fwp3WYgvJ6R6a8crw3DyEYsrEaw-JY_RO55UvqcjizyBYw-ylMF2wZX2e_BqP2_HXoAew60");
+            _client = new PayPalHttpClient(_environment);
+        }
 
-//        public PaymentController(PaymentsDbContext context, PayPalService payPalService)
-//        {
-//            _context = context;
-//            _payPalService = payPalService;
-//        }
+        public async Task<Order> CreatePayment(decimal totalAmount, string currency, string returnUrl, string cancelUrl)
+        {
+            var orderRequest = new OrderRequest()
+            {
+                CheckoutPaymentIntent = "CAPTURE",
+                PurchaseUnits = new List<PurchaseUnitRequest>
+                {
+                    new PurchaseUnitRequest
+                    {
+                        AmountWithBreakdown = new AmountWithBreakdown
+                        {
+                            CurrencyCode = currency,
+                            Value = totalAmount.ToString("F2")
+                        }
+                    }
+                },
+                ApplicationContext = new ApplicationContext
+                {
+                    ReturnUrl = returnUrl,
+                    CancelUrl = cancelUrl
+                }
+            };
 
-//        [HttpPost("pay/paypal")]
-//        public IActionResult PayWithPayPal([FromBody] LocalPayment payment)
-//        {
-//            try
-//            {
-//                // Dummy order and user IDs for testing
-//                payment.OrderId = Guid.NewGuid();
-//                payment.UserId = Guid.NewGuid();
-//                payment.PaymentStatus = "PENDING";
-//                payment.CreatedAt = DateTime.UtcNow;
-//                payment.UpdatedAt = DateTime.UtcNow;
+            var request = new OrdersCreateRequest();
+            request.Prefer("return=representation");
+            request.RequestBody(orderRequest);
 
-//                _context.Payments.Add(payment);
-//                _context.SaveChanges();
-
-//                var createdPayment = _payPalService.CreatePayment(
-//                    payment.TotalAmount, payment.Currency,
-//                    "http://localhost:5212/api/payments/execute",
-//                    "http://localhost:5212/api/payments/cancel"
-//                );
-
-//                var approvalUrl = createdPayment.links
-//                    .FirstOrDefault(l => l.rel.Equals("approval_url", StringComparison.OrdinalIgnoreCase))?.href;
-
-//                return Ok(new
-//                {
-//                    message = "Redirect the user to PayPal to approve the payment",
-//                    approval_url = approvalUrl,
-//                    paymentId = createdPayment.id
-//                });
-//            }
-//            catch (Exception ex)
-//            {
-//                return StatusCode(500, new
-//                {
-//                    message = "Error initiating PayPal payment",
-//                    error = ex.Message,
-//                    innerException = ex.InnerException?.Message
-//                });
-//            }
-//        }
-
-//        [HttpGet("execute")]
-//        public IActionResult ExecutePayment([FromQuery] string paymentId, [FromQuery] string payerId)
-//        {
-//            try
-//            {
-//                var executedPayment = _payPalService.ExecutePayment(paymentId, payerId);
-
-//                // You can optionally update your database here if needed
-
-//                return Ok(new
-//                {
-//                    message = "Payment executed successfully",
-//                    executedPayment
-//                });
-//            }
-//            catch (Exception ex)
-//            {
-//                return StatusCode(500, new
-//                {
-//                    message = "Error executing PayPal payment",
-//                    error = ex.Message,
-//                    innerException = ex.InnerException?.Message
-//                });
-//            }
-//        }
-
-//        [HttpGet("cancel")]
-//        public IActionResult CancelPayment()
-//        {
-//            return Ok(new { message = "Payment cancelled by the user." });
-//        }
-//    }
-//}
+            var response = await _client.Execute(request);
+            var result = response.Result<Order>();
+            return result;
+        }
+    }
+}

@@ -1,11 +1,9 @@
-﻿
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Payment_Service.Models;
 
 namespace Payment_Service.Models
 {
-    [Table("payment")]  
+    [Table("payment")]
     public class Payment
     {
         [Key]
@@ -22,13 +20,14 @@ namespace Payment_Service.Models
         public decimal TotalAmount { get; set; }
 
         [Column("currency")]
-        public string Currency { get; set; } = "USD";
+        public string Currency { get; set; } = "USD"; // default currency is USD
 
         [Column("payment_method")]
-        public string PaymentMethod { get; set; }
+        [Required] // Makes this property required
+        public string PaymentMethod { get; set; } = string.Empty; // default value set as empty
 
         [Column("payment_status")]
-        public string PaymentStatus { get; set; } = "PENDING";
+        public string PaymentStatus { get; set; } = "PENDING"; // default status is "PENDING"
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
