@@ -14,7 +14,7 @@ namespace Payment_Service.Service
             _config = config;
         }
 
-        public APIContext GetAPIContext()
+        private APIContext GetAPIContext()
         {
             var clientId = _config["PayPal:ClientId"];
             var clientSecret = _config["PayPal:ClientSecret"];

@@ -55,6 +55,9 @@ C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\ne
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\net8.0\Mono.TextTemplating.dll
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\net8.0\OpenSSL.PrivateKeyDecoder.dll
+C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\net8.0\OpenSSL.X509Certificate2.Provider.dll
+C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\net8.0\CloudrailSI.dll
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\net8.0\PayPal.dll
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\net8.0\PayPalCheckoutSdk.dll
 C:\Users\hp\Desktop\payment-service\Payment-Service\Payment-Service\bin\Debug\net8.0\PayPalHttp-Dotnet.dll

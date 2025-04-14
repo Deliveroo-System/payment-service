@@ -47,6 +47,45 @@
           }
         }
       },
+      "Crc32.NET/1.2.0": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "2.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Crc32.NET.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Crc32.NET.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "ElCamino.PayPalCheckoutSdk/2.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Crc32.NET": "1.2.0",
+          "ElCamino.PayPalHttp": "2.1.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.2.0"
+        },
+        "compile": {
+          "lib/net8.0/ElCamino.PayPalCheckoutSdk.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/ElCamino.PayPalCheckoutSdk.dll": {}
+        }
+      },
+      "ElCamino.PayPalHttp/2.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/ElCamino.PayPalHttp.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/ElCamino.PayPalHttp.dll": {}
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -1217,6 +1256,21 @@
           "buildTransitive/Mono.TextTemplating.targets": {}
         }
       },
+      "NETStandard.Library/2.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0"
+        },
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "build": {
+          "build/netstandard2.0/_._": {}
+        }
+      },
       "Newtonsoft.Json/13.0.3": {
         "type": "package",
         "compile": {
@@ -1246,22 +1300,6 @@
           }
         }
       },
-      "PayPal/1.9.1": {
-        "type": "package",
-        "dependencies": {
-          "Newtonsoft.Json": "7.0.1"
-        },
-        "compile": {
-          "lib/net451/PayPal.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net451/PayPal.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "PayPal.SDK.NETCore/1.9.1.2": {
         "type": "package",
         "dependencies": {
@@ -1281,18 +1319,6 @@
           "lib/netstandard2.0/PayPal.dll": {
             "related": ".SDK.xml"
           }
-        }
-      },
-      "PayPalCheckoutSdk/1.0.4": {
-        "type": "package",
-        "dependencies": {
-          "PayPalHttp": "1.0.1"
-        },
-        "compile": {
-          "lib/netstandard2.0/PayPalCheckoutSdk.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/PayPalCheckoutSdk.dll": {}
         }
       },
       "PayPalHttp/1.0.1": {
@@ -2870,6 +2896,54 @@
         "azureicon.png",
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml"
+      ]
+    },
+    "Crc32.NET/1.2.0": {
+      "sha512": "wNW/huzolu8MNKUnwCVKxjfAlCFpeI8AZVfF46iAWJ1+P6bTU1AZct7VAkDDEjgeeTJCVTkGZaD6jSd/fOiUkA==",
+      "type": "package",
+      "path": "crc32.net/1.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "crc32.net.1.2.0.nupkg.sha512",
+        "crc32.net.nuspec",
+        "lib/net20/Crc32.NET.dll",
+        "lib/net20/Crc32.NET.xml",
+        "lib/netstandard1.3/Crc32.NET.dll",
+        "lib/netstandard1.3/Crc32.NET.xml",
+        "lib/netstandard2.0/Crc32.NET.dll",
+        "lib/netstandard2.0/Crc32.NET.xml"
+      ]
+    },
+    "ElCamino.PayPalCheckoutSdk/2.3.0": {
+      "sha512": "GOH/QRQ6uBB4BK1PMTs5NsvY2jW3Dd/0jdYMPOg7Ymhm8O1ESyyuFOpFKDZMONq2EXvjJ51FR8FbhsL0fAdOBg==",
+      "type": "package",
+      "path": "elcamino.paypalcheckoutsdk/2.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "elcamino.paypalcheckoutsdk.2.3.0.nupkg.sha512",
+        "elcamino.paypalcheckoutsdk.nuspec",
+        "lib/net8.0/ElCamino.PayPalCheckoutSdk.dll",
+        "lib/net9.0/ElCamino.PayPalCheckoutSdk.dll",
+        "projectNugetPic.png"
+      ]
+    },
+    "ElCamino.PayPalHttp/2.1.0": {
+      "sha512": "xaQeya1bPeVXoGmP8UWjZ1ZhQUnoq6W431G6pKpeEiNBMhTcfSbZ1bmvG9m3qZ1Hp7SZ7K6e1kOR/g9UH1Lu3w==",
+      "type": "package",
+      "path": "elcamino.paypalhttp/2.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "elcamino.paypalhttp.2.1.0.nupkg.sha512",
+        "elcamino.paypalhttp.nuspec",
+        "lib/net8.0/ElCamino.PayPalHttp.dll",
+        "lib/net9.0/ElCamino.PayPalHttp.dll",
+        "projectNugetPic.png"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -5312,6 +5386,136 @@
         "readme.md"
       ]
     },
+    "NETStandard.Library/2.0.0": {
+      "sha512": "7jnbRU+L08FXKMxqUflxEXtVymWvNOrS8yHgu9s6EM8Anr6T/wIX4nZ08j/u3Asz+tCufp3YVwFSEvFTPYmBPA==",
+      "type": "package",
+      "path": "netstandard.library/2.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "build/NETStandard.Library.targets",
+        "build/netstandard2.0/NETStandard.Library.targets",
+        "build/netstandard2.0/ref/Microsoft.Win32.Primitives.dll",
+        "build/netstandard2.0/ref/System.AppContext.dll",
+        "build/netstandard2.0/ref/System.Collections.Concurrent.dll",
+        "build/netstandard2.0/ref/System.Collections.NonGeneric.dll",
+        "build/netstandard2.0/ref/System.Collections.Specialized.dll",
+        "build/netstandard2.0/ref/System.Collections.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.Composition.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.EventBasedAsync.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.Primitives.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.TypeConverter.dll",
+        "build/netstandard2.0/ref/System.ComponentModel.dll",
+        "build/netstandard2.0/ref/System.Console.dll",
+        "build/netstandard2.0/ref/System.Core.dll",
+        "build/netstandard2.0/ref/System.Data.Common.dll",
+        "build/netstandard2.0/ref/System.Data.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Contracts.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Debug.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.FileVersionInfo.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Process.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.StackTrace.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.TextWriterTraceListener.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Tools.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.TraceSource.dll",
+        "build/netstandard2.0/ref/System.Diagnostics.Tracing.dll",
+        "build/netstandard2.0/ref/System.Drawing.Primitives.dll",
+        "build/netstandard2.0/ref/System.Drawing.dll",
+        "build/netstandard2.0/ref/System.Dynamic.Runtime.dll",
+        "build/netstandard2.0/ref/System.Globalization.Calendars.dll",
+        "build/netstandard2.0/ref/System.Globalization.Extensions.dll",
+        "build/netstandard2.0/ref/System.Globalization.dll",
+        "build/netstandard2.0/ref/System.IO.Compression.FileSystem.dll",
+        "build/netstandard2.0/ref/System.IO.Compression.ZipFile.dll",
+        "build/netstandard2.0/ref/System.IO.Compression.dll",
+        "build/netstandard2.0/ref/System.IO.FileSystem.DriveInfo.dll",
+        "build/netstandard2.0/ref/System.IO.FileSystem.Primitives.dll",
+        "build/netstandard2.0/ref/System.IO.FileSystem.Watcher.dll",
+        "build/netstandard2.0/ref/System.IO.FileSystem.dll",
+        "build/netstandard2.0/ref/System.IO.IsolatedStorage.dll",
+        "build/netstandard2.0/ref/System.IO.MemoryMappedFiles.dll",
+        "build/netstandard2.0/ref/System.IO.Pipes.dll",
+        "build/netstandard2.0/ref/System.IO.UnmanagedMemoryStream.dll",
+        "build/netstandard2.0/ref/System.IO.dll",
+        "build/netstandard2.0/ref/System.Linq.Expressions.dll",
+        "build/netstandard2.0/ref/System.Linq.Parallel.dll",
+        "build/netstandard2.0/ref/System.Linq.Queryable.dll",
+        "build/netstandard2.0/ref/System.Linq.dll",
+        "build/netstandard2.0/ref/System.Net.Http.dll",
+        "build/netstandard2.0/ref/System.Net.NameResolution.dll",
+        "build/netstandard2.0/ref/System.Net.NetworkInformation.dll",
+        "build/netstandard2.0/ref/System.Net.Ping.dll",
+        "build/netstandard2.0/ref/System.Net.Primitives.dll",
+        "build/netstandard2.0/ref/System.Net.Requests.dll",
+        "build/netstandard2.0/ref/System.Net.Security.dll",
+        "build/netstandard2.0/ref/System.Net.Sockets.dll",
+        "build/netstandard2.0/ref/System.Net.WebHeaderCollection.dll",
+        "build/netstandard2.0/ref/System.Net.WebSockets.Client.dll",
+        "build/netstandard2.0/ref/System.Net.WebSockets.dll",
+        "build/netstandard2.0/ref/System.Net.dll",
+        "build/netstandard2.0/ref/System.Numerics.dll",
+        "build/netstandard2.0/ref/System.ObjectModel.dll",
+        "build/netstandard2.0/ref/System.Reflection.Extensions.dll",
+        "build/netstandard2.0/ref/System.Reflection.Primitives.dll",
+        "build/netstandard2.0/ref/System.Reflection.dll",
+        "build/netstandard2.0/ref/System.Resources.Reader.dll",
+        "build/netstandard2.0/ref/System.Resources.ResourceManager.dll",
+        "build/netstandard2.0/ref/System.Resources.Writer.dll",
+        "build/netstandard2.0/ref/System.Runtime.CompilerServices.VisualC.dll",
+        "build/netstandard2.0/ref/System.Runtime.Extensions.dll",
+        "build/netstandard2.0/ref/System.Runtime.Handles.dll",
+        "build/netstandard2.0/ref/System.Runtime.InteropServices.RuntimeInformation.dll",
+        "build/netstandard2.0/ref/System.Runtime.InteropServices.dll",
+        "build/netstandard2.0/ref/System.Runtime.Numerics.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.Formatters.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.Json.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.Primitives.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.Xml.dll",
+        "build/netstandard2.0/ref/System.Runtime.Serialization.dll",
+        "build/netstandard2.0/ref/System.Runtime.dll",
+        "build/netstandard2.0/ref/System.Security.Claims.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.Algorithms.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.Csp.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.Encoding.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.Primitives.dll",
+        "build/netstandard2.0/ref/System.Security.Cryptography.X509Certificates.dll",
+        "build/netstandard2.0/ref/System.Security.Principal.dll",
+        "build/netstandard2.0/ref/System.Security.SecureString.dll",
+        "build/netstandard2.0/ref/System.ServiceModel.Web.dll",
+        "build/netstandard2.0/ref/System.Text.Encoding.Extensions.dll",
+        "build/netstandard2.0/ref/System.Text.Encoding.dll",
+        "build/netstandard2.0/ref/System.Text.RegularExpressions.dll",
+        "build/netstandard2.0/ref/System.Threading.Overlapped.dll",
+        "build/netstandard2.0/ref/System.Threading.Tasks.Parallel.dll",
+        "build/netstandard2.0/ref/System.Threading.Tasks.dll",
+        "build/netstandard2.0/ref/System.Threading.Thread.dll",
+        "build/netstandard2.0/ref/System.Threading.ThreadPool.dll",
+        "build/netstandard2.0/ref/System.Threading.Timer.dll",
+        "build/netstandard2.0/ref/System.Threading.dll",
+        "build/netstandard2.0/ref/System.Transactions.dll",
+        "build/netstandard2.0/ref/System.ValueTuple.dll",
+        "build/netstandard2.0/ref/System.Web.dll",
+        "build/netstandard2.0/ref/System.Windows.dll",
+        "build/netstandard2.0/ref/System.Xml.Linq.dll",
+        "build/netstandard2.0/ref/System.Xml.ReaderWriter.dll",
+        "build/netstandard2.0/ref/System.Xml.Serialization.dll",
+        "build/netstandard2.0/ref/System.Xml.XDocument.dll",
+        "build/netstandard2.0/ref/System.Xml.XPath.XDocument.dll",
+        "build/netstandard2.0/ref/System.Xml.XPath.dll",
+        "build/netstandard2.0/ref/System.Xml.XmlDocument.dll",
+        "build/netstandard2.0/ref/System.Xml.XmlSerializer.dll",
+        "build/netstandard2.0/ref/System.Xml.dll",
+        "build/netstandard2.0/ref/System.dll",
+        "build/netstandard2.0/ref/mscorlib.dll",
+        "build/netstandard2.0/ref/netstandard.dll",
+        "build/netstandard2.0/ref/netstandard.xml",
+        "lib/netstandard1.0/_._",
+        "netstandard.library.2.0.0.nupkg.sha512",
+        "netstandard.library.nuspec"
+      ]
+    },
     "Newtonsoft.Json/13.0.3": {
       "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
       "type": "package",
@@ -5363,23 +5567,6 @@
         "newtonsoft.json.bson.nuspec"
       ]
     },
-    "PayPal/1.9.1": {
-      "sha512": "b3vq6Lc9CwSooCX2tsZ02zb7E/K/cA6EILCoMynue+ZeVuitJNqt0YwxPnp7uN0Pccob02oDlpAjRLH+GRCRxA==",
-      "type": "package",
-      "path": "paypal/1.9.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net40/PayPal.dll",
-        "lib/net40/PayPal.xml",
-        "lib/net45/PayPal.dll",
-        "lib/net45/PayPal.xml",
-        "lib/net451/PayPal.dll",
-        "lib/net451/PayPal.xml",
-        "paypal.1.9.1.nupkg.sha512",
-        "paypal.nuspec"
-      ]
-    },
     "PayPal.SDK.NETCore/1.9.1.2": {
       "sha512": "a65xkBvllrpYn9SEnbiKrAmc5rxj1P/jgnb36EQnJhvfUIlQ4w+hne2AszIusM7Mh2h2csUnMDqKnXGkTpVueQ==",
       "type": "package",
@@ -5391,18 +5578,6 @@
         "lib/netstandard2.0/PayPal.dll",
         "paypal.sdk.netcore.1.9.1.2.nupkg.sha512",
         "paypal.sdk.netcore.nuspec"
-      ]
-    },
-    "PayPalCheckoutSdk/1.0.4": {
-      "sha512": "4fsOPj6SOJurbVf5ANg7NQ5TNvSYmtngf3dpJN11xEk6BP+5Rn6OcaaTbUx+bVnnYmgaoe5LbRZe52QpAjuwqg==",
-      "type": "package",
-      "path": "paypalcheckoutsdk/1.0.4",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/PayPalCheckoutSdk.dll",
-        "paypalcheckoutsdk.1.0.4.nupkg.sha512",
-        "paypalcheckoutsdk.nuspec"
       ]
     },
     "PayPalHttp/1.0.1": {
@@ -8817,6 +8992,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "ElCamino.PayPalCheckoutSdk >= 2.3.0",
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 8.0.4",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.3",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.3",
@@ -8824,9 +9000,8 @@
       "Microsoft.Extensions.Http >= 9.0.4",
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.21.2",
       "Newtonsoft.Json >= 13.0.3",
-      "PayPal >= 1.9.1",
       "PayPal.SDK.NETCore >= 1.9.1.2",
-      "PayPalCheckoutSdk >= 1.0.4",
+      "PayPalHttp >= 1.0.1",
       "Swashbuckle.AspNetCore >= 8.0.0"
     ]
   },
@@ -8880,6 +9055,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "ElCamino.PayPalCheckoutSdk": {
+            "target": "Package",
+            "version": "[2.3.0, )"
+          },
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
             "target": "Package",
             "version": "[8.0.4, )"
@@ -8912,17 +9091,13 @@
             "target": "Package",
             "version": "[13.0.3, )"
           },
-          "PayPal": {
-            "target": "Package",
-            "version": "[1.9.1, )"
-          },
           "PayPal.SDK.NETCore": {
             "target": "Package",
             "version": "[1.9.1.2, )"
           },
-          "PayPalCheckoutSdk": {
+          "PayPalHttp": {
             "target": "Package",
-            "version": "[1.0.4, )"
+            "version": "[1.0.1, )"
           },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
@@ -8959,16 +9134,6 @@
       "warningLevel": 1,
       "message": "Package 'System.Net.Http' 4.3.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-7jgj-8wvc-jh57",
       "libraryId": "System.Net.Http",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'PayPal 1.9.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
-      "libraryId": "PayPal",
       "targetGraphs": [
         "net8.0"
       ]

@@ -16,6 +16,7 @@
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.21.2",
           "Newtonsoft.Json": "13.0.3",
           "PayPal": "1.9.1",
+          "PayPal.Api": "1.0.6",
           "PayPal.SDK.NETCore": "1.9.1.2",
           "PayPalCheckoutSdk": "1.0.4",
           "Swashbuckle.AspNetCore": "8.0.0"
@@ -897,9 +898,40 @@
           }
         }
       },
+      "OpenSSL.PrivateKeyDecoder/1.2.0": {
+        "runtime": {
+          "lib/netstandard2.0/OpenSSL.PrivateKeyDecoder.dll": {
+            "assemblyVersion": "1.2.0.0",
+            "fileVersion": "1.2.0.0"
+          }
+        }
+      },
+      "OpenSSL.X509Certificate2.Provider/1.2.0": {
+        "dependencies": {
+          "OpenSSL.PrivateKeyDecoder": "1.2.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/OpenSSL.X509Certificate2.Provider.dll": {
+            "assemblyVersion": "1.2.0.0",
+            "fileVersion": "1.2.0.0"
+          }
+        }
+      },
       "PayPal/1.9.1": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.3"
+        }
+      },
+      "PayPal.Api/1.0.6": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3",
+          "OpenSSL.X509Certificate2.Provider": "1.2.0"
+        },
+        "runtime": {
+          "lib/CloudrailSI.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "PayPal.SDK.NETCore/1.9.1.2": {
@@ -2111,12 +2143,33 @@
       "path": "newtonsoft.json.bson/1.0.2",
       "hashPath": "newtonsoft.json.bson.1.0.2.nupkg.sha512"
     },
+    "OpenSSL.PrivateKeyDecoder/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2+NGfjqjpIyXEVtsEg5ML7E6bzPGiw6RtH0a7rUhtAEBWWo/d/7uI/TKtHW+/EPO4E/0Gpz4ozG2ETqOAhpmVw==",
+      "path": "openssl.privatekeydecoder/1.2.0",
+      "hashPath": "openssl.privatekeydecoder.1.2.0.nupkg.sha512"
+    },
+    "OpenSSL.X509Certificate2.Provider/1.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-mXoKvCxJHgzIIxvC3VQ1QZC4KeyLUDuxIVD2DAzEJG7aLOC+zvlE0QsNG1tNbp/1eoI0u0RHnM8UL/y88vdiRQ==",
+      "path": "openssl.x509certificate2.provider/1.2.0",
+      "hashPath": "openssl.x509certificate2.provider.1.2.0.nupkg.sha512"
+    },
     "PayPal/1.9.1": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-b3vq6Lc9CwSooCX2tsZ02zb7E/K/cA6EILCoMynue+ZeVuitJNqt0YwxPnp7uN0Pccob02oDlpAjRLH+GRCRxA==",
       "path": "paypal/1.9.1",
       "hashPath": "paypal.1.9.1.nupkg.sha512"
+    },
+    "PayPal.Api/1.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kMR2QUwB7rwAoJ5q5J4V0+2Hli9i0r0X00K+GKV+yCLNd6uQc5WxVv2j2JEMJgOebQI0PMDl2Z8mv/X6c2lJcw==",
+      "path": "paypal.api/1.0.6",
+      "hashPath": "paypal.api.1.0.6.nupkg.sha512"
     },
     "PayPal.SDK.NETCore/1.9.1.2": {
       "type": "package",
