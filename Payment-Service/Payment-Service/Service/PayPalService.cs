@@ -1,69 +1,57 @@
-﻿using PayPal.Api;
-using System;
+﻿using PayPalCheckoutSdk.Orders;
+using PayPalHttp;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using System;
+using PayPalCheckoutSdk.Core;
 
 namespace Payment_Service.Service
 {
     public class PayPalService
     {
-        private readonly IConfiguration _config;
+        private readonly PayPalHttpClient _client;
 
-        public PayPalService(IConfiguration config)
+        public PayPalService()
         {
-            _config = config;
+            var environment = new SandboxEnvironment("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET");
+            _client = new PayPalHttpClient(environment);
         }
 
-        private APIContext GetAPIContext()
+        public async Task<Order> CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
         {
-            var clientId = _config["PayPal:ClientId"];
-            var clientSecret = _config["PayPal:ClientSecret"];
-            var config = new Dictionary<string, string>
+            var orderRequest = new OrderRequest()
             {
-                { "mode", _config["PayPal:Mode"] }
-            };
-
-            var accessToken = new OAuthTokenCredential(clientId, clientSecret, config).GetAccessToken();
-            return new APIContext(accessToken) { Config = config };
-        }
-
-        public Payment CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
-        {
-            var apiContext = GetAPIContext();
-
-            var payment = new Payment
-            {
-                intent = "sale",
-                payer = new Payer { payment_method = "paypal" },
-                transactions = new List<Transaction>
+                CheckoutPaymentIntent = "CAPTURE",
+                PurchaseUnits = new List<PurchaseUnitRequest>
                 {
-                    new Transaction
+                    new PurchaseUnitRequest
                     {
-                        amount = new Amount
+                        AmountWithBreakdown = new AmountWithBreakdown
                         {
-                            total = amount.ToString("F2"),
-                            currency = currency
-                        },
-                        description = "Food Order Payment"
+                            CurrencyCode = currency,
+                            Value = amount.ToString("F2") // Always format to two decimal places
+                        }
                     }
                 },
-                redirect_urls = new RedirectUrls
+                ApplicationContext = new ApplicationContext
                 {
-                    return_url = returnUrl,
-                    cancel_url = cancelUrl
+                    ReturnUrl = returnUrl,
+                    CancelUrl = cancelUrl,
+                    BrandName = "My Payment App",
+                    LandingPage = "BILLING",
+                    UserAction = "PAY_NOW"
                 }
             };
 
-            return payment.Create(apiContext);
-        }
+            var request = new OrdersCreateRequest();
+            request.Prefer("return=representation");
+            request.RequestBody(orderRequest);
 
-        public Payment ExecutePayment(string paymentId, string payerId)
-        {
-            var apiContext = GetAPIContext();
-            var paymentExecution = new PaymentExecution { payer_id = payerId };
-            var payment = new Payment { id = paymentId };
+            var response = await _client.Execute(request);
+            var statusCode = response.StatusCode;
 
-            return payment.Execute(apiContext, paymentExecution);
+            var result = response.Result<Order>();
+            return result;
         }
     }
 }

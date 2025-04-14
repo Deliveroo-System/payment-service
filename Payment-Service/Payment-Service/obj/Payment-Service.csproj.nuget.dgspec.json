@@ -50,10 +50,6 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "ElCamino.PayPalCheckoutSdk": {
-              "target": "Package",
-              "version": "[2.3.0, )"
-            },
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
               "version": "[8.0.4, )"
@@ -89,6 +85,10 @@
             "PayPal.SDK.NETCore": {
               "target": "Package",
               "version": "[1.9.1.2, )"
+            },
+            "PayPalCheckoutSdk": {
+              "target": "Package",
+              "version": "[1.0.4, )"
             },
             "PayPalHttp": {
               "target": "Package",

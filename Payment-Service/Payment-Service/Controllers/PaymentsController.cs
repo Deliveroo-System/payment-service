@@ -4,7 +4,7 @@ using Payment_Service.Service;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using PayPalCheckoutSdk.Orders;
+using LocalPayment = Payment_Service.Models.Payment;
 
 namespace Payment_Service.Controllers
 {
@@ -21,15 +21,12 @@ namespace Payment_Service.Controllers
             _payPalService = payPalService;
         }
 
-        // ✅ Local test payment creation
+        // ✅ Create a generic payment (not linked to any gateway)
         [HttpPost("create")]
-        public IActionResult CreatePayment([FromBody] Payment payment)
+        public IActionResult CreatePayment([FromBody] LocalPayment payment)
         {
             try
             {
-                if (payment == null || payment.TotalAmount <= 0 || string.IsNullOrEmpty(payment.Currency))
-                    return BadRequest(new { message = "Invalid payment details." });
-
                 payment.OrderId = Guid.NewGuid();
                 payment.UserId = Guid.NewGuid();
                 payment.PaymentStatus = "PENDING";
@@ -43,101 +40,78 @@ namespace Payment_Service.Controllers
             }
             catch (Exception ex)
             {
+                return StatusCode(500, new { message = "Error while creating payment", error = ex.Message });
+            }
+        }
+
+        // ✅ Pay with PayPal
+        [HttpPost("pay/paypal")]
+        public async Task<IActionResult> PayWithPayPal([FromBody] LocalPayment payment)
+        {
+            try
+            {
+                payment.OrderId = Guid.NewGuid();
+                payment.UserId = Guid.NewGuid();
+                payment.PaymentStatus = "PENDING";
+                payment.CreatedAt = DateTime.UtcNow;
+                payment.UpdatedAt = DateTime.UtcNow;
+
+                _context.Payments.Add(payment);
+                _context.SaveChanges();
+
+                var paypalOrder = await _payPalService.CreatePayment(payment.TotalAmount, payment.Currency,
+                    "http://localhost:5212/api/payments/execute",
+                    "http://localhost:5212/api/payments/cancel");
+
+                var approvalLink = paypalOrder.Links.FirstOrDefault(link => link.Rel == "approve")?.Href;
+
+                var paypalTransaction = new PaymentPaypalTransaction
+                {
+                    PaymentId = payment.PaymentId,
+                    PayPalTransactionId = paypalOrder.Id,
+                    TransactionStatus = "CREATED",
+                    TransactionAmount = payment.TotalAmount,
+                    TransactionCurrency = payment.Currency,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.PaymentPaypalTransactions.Add(paypalTransaction);
+                _context.SaveChanges();
+
+                return Ok(new
+                {
+                    message = "PayPal payment created. Redirect the user to approval URL.",
+                    approvalUrl = approvalLink,
+                    payment,
+                    paypalTransaction
+                });
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, new
                 {
-                    message = "An error occurred while creating the payment",
+                    message = "Error while processing PayPal payment",
                     error = ex.Message,
                     innerException = ex.InnerException?.Message
                 });
             }
         }
 
-        // ✅ PayPal Payment (Real)
-      [HttpPost("pay/paypal")]
-public async Task<IActionResult> PayWithPayPal([FromBody] Payment payment)
-{
-    try
-    {
-        if (payment == null || payment.TotalAmount <= 0 || string.IsNullOrEmpty(payment.Currency))
-            return BadRequest(new { message = "Invalid payment details." });
-
-        payment.OrderId = Guid.NewGuid();
-        payment.UserId = Guid.NewGuid();
-        payment.PaymentStatus = "PENDING";
-        payment.PaymentMethod = "PayPal";
-        payment.CreatedAt = DateTime.UtcNow;
-        payment.UpdatedAt = DateTime.UtcNow;
-
-        // Save the payment details into the database synchronously
-        _context.Payments.Add(payment);
-        _context.SaveChanges();
-
-        // Now, call the PayPal service asynchronously
-        var createdOrder = await _payPalService.CreatePayment(
-            payment.TotalAmount,
-            payment.Currency,
-            "http://localhost:5212/api/payments/execute",  // Return URL
-            "http://localhost:5212/api/payments/cancel"    // Cancel URL
-        );
-
-        var approvalLink = createdOrder.Links?
-            .FirstOrDefault(link => link.Rel.Equals("approve", StringComparison.OrdinalIgnoreCase))?.Href;
-
-        // Save PayPal transaction
-        var paypalTransaction = new PaymentPaypalTransaction
-        {
-            PaymentId = payment.PaymentId,
-            PayPalTransactionId = createdOrder.Id,
-            TransactionStatus = "PENDING",
-            TransactionAmount = payment.TotalAmount,
-            TransactionCurrency = payment.Currency,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        _context.PaymentPaypalTransactions.Add(paypalTransaction);
-        _context.SaveChanges();
-
-        return Ok(new
-        {
-            message = "Redirect the user to PayPal to approve the payment",
-            approval_url = approvalLink,
-            paypalTransaction
-        });
-    }
-    catch (Exception ex)
-    {
-        return StatusCode(500, new
-        {
-            message = "An error occurred while processing PayPal payment",
-            error = ex.Message,
-            innerException = ex.InnerException?.Message
-        });
-    }
-}
-
-        // ✅ Cash on Delivery Payment
+        // ✅ Pay with Cash on Delivery
         [HttpPost("pay/cod")]
-        public IActionResult PayWithCOD([FromBody] Payment payment)
+        public IActionResult PayWithCOD([FromBody] LocalPayment payment)
         {
             try
             {
-                // Validate payment details
-                if (payment == null || payment.TotalAmount <= 0 || string.IsNullOrEmpty(payment.Currency))
-                    return BadRequest(new { message = "Invalid payment details." });
-
-                // Initialize properties
                 payment.OrderId = Guid.NewGuid();
                 payment.UserId = Guid.NewGuid();
                 payment.PaymentStatus = "PENDING";
-                payment.PaymentMethod = "CashOnDelivery";
                 payment.CreatedAt = DateTime.UtcNow;
                 payment.UpdatedAt = DateTime.UtcNow;
 
-                // Add payment to the database
                 _context.Payments.Add(payment);
                 _context.SaveChanges();
 
-                // Save COD transaction details in the database
                 var codTransaction = new PaymentCODTransaction
                 {
                     PaymentId = payment.PaymentId,
@@ -159,7 +133,7 @@ public async Task<IActionResult> PayWithPayPal([FromBody] Payment payment)
             {
                 return StatusCode(500, new
                 {
-                    message = "An error occurred while processing Cash on Delivery payment",
+                    message = "Error while processing COD payment",
                     error = ex.Message,
                     innerException = ex.InnerException?.Message
                 });
