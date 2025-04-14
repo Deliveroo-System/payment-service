@@ -1,6 +1,6 @@
 [
   {
-    "ContainingType": "Payment_Service.Controllers.PaymentController",
+    "ContainingType": "Payment_Service.Controllers.PaymentsController",
     "Method": "CreatePayment",
     "RelativePath": "api/payments/create",
     "HttpMethod": "POST",
@@ -16,7 +16,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Payment_Service.Controllers.PaymentController",
+    "ContainingType": "Payment_Service.Controllers.PaymentsController",
     "Method": "PayWithCOD",
     "RelativePath": "api/payments/pay/cod",
     "HttpMethod": "POST",
@@ -32,7 +32,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Payment_Service.Controllers.PaymentController",
+    "ContainingType": "Payment_Service.Controllers.PaymentsController",
     "Method": "PayWithPayPal",
     "RelativePath": "api/payments/pay/paypal",
     "HttpMethod": "POST",

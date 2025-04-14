@@ -1,67 +1,57 @@
-﻿using Payment_Service.Service;
-using PayPal.Api;
-using System;
+﻿using PayPalCheckoutSdk.Orders;
+using PayPalHttp;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
+using PayPalCheckoutSdk.Core;
 
 namespace Payment_Service.Service
 {
     public class PayPalService
     {
-        private readonly IConfiguration _config;
+        private readonly PayPalHttpClient _client;
 
-        public PayPalService(IConfiguration config)
+        public PayPalService()
         {
-            _config = config;
+            var environment = new SandboxEnvironment("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET");
+            _client = new PayPalHttpClient(environment);
         }
 
-        public APIContext GetAPIContext()
+        public async Task<Order> CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
         {
-            try
+            var orderRequest = new OrderRequest()
             {
-                var clientId = _config["PayPal:ClientId"];
-                var clientSecret = _config["PayPal:ClientSecret"];
-                var config = new Dictionary<string, string>
+                CheckoutPaymentIntent = "CAPTURE",
+                PurchaseUnits = new List<PurchaseUnitRequest>
                 {
-                    { "mode", _config["PayPal:Mode"] }
-                };
-
-                var accessToken = new OAuthTokenCredential(clientId, clientSecret, config).GetAccessToken();
-                return new APIContext(accessToken) { Config = config };
-            }
-            catch (Exception ex)
-            {
-                // Handle any errors related to access token retrieval
-                throw new Exception("Error retrieving PayPal access token.", ex);
-            }
-        }
-
-        public Payment CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
-        {
-            try
-            {
-                var apiContext = GetAPIContext();
-                var payment = new Payment
-                {
-                    intent = "sale",
-                    payer = new Payer { payment_method = "paypal" },
-                    transactions = new List<Transaction>
+                    new PurchaseUnitRequest
                     {
-                        new Transaction
+                        AmountWithBreakdown = new AmountWithBreakdown
                         {
-                            amount = new Amount { total = amount.ToString(), currency = currency },
-                            description = "Food Order Payment"
+                            CurrencyCode = currency,
+                            Value = amount.ToString("F2") // Always format to two decimal places
                         }
-                    },
-                    redirect_urls = new RedirectUrls { return_url = returnUrl, cancel_url = cancelUrl }
-                };
+                    }
+                },
+                ApplicationContext = new ApplicationContext
+                {
+                    ReturnUrl = returnUrl,
+                    CancelUrl = cancelUrl,
+                    BrandName = "My Payment App",
+                    LandingPage = "BILLING",
+                    UserAction = "PAY_NOW"
+                }
+            };
 
-                return payment.Create(apiContext);
-            }
-            catch (Exception ex)
-            {
-                // Handle errors during payment creation
-                throw new Exception("Error creating PayPal payment.", ex);
-            }
+            var request = new OrdersCreateRequest();
+            request.Prefer("return=representation");
+            request.RequestBody(orderRequest);
+
+            var response = await _client.Execute(request);
+            var statusCode = response.StatusCode;
+
+            var result = response.Result<Order>();
+            return result;
         }
     }
 }
