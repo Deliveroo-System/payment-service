@@ -17,6 +17,22 @@
   },
   {
     "ContainingType": "Payment_Service.Controllers.PaymentsController",
+    "Method": "ExecutePayment",
+    "RelativePath": "api/payments/execute",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Payment_Service.Controllers.PaymentsController",
     "Method": "PayWithCOD",
     "RelativePath": "api/payments/pay/cod",
     "HttpMethod": "POST",
@@ -45,6 +61,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Payment_Service.Controllers.PaymentsController",
+    "Method": "Ping",
+    "RelativePath": "api/payments/ping",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

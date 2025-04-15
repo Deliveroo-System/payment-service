@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Payment_Service.Models;
 using Payment_Service.Service;
+using PayPalCheckoutSdk.Orders;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -101,6 +102,7 @@ namespace Payment_Service.Controllers
         [HttpPost("pay/cod")]
         public IActionResult PayWithCOD([FromBody] LocalPayment payment)
         {
+            Console.WriteLine("🚀 PayWithPayPal endpoint hit");
             try
             {
                 payment.OrderId = Guid.NewGuid();
@@ -138,6 +140,39 @@ namespace Payment_Service.Controllers
                     innerException = ex.InnerException?.Message
                 });
             }
+
+           
+        }
+
+        [HttpGet("execute")]
+        public async Task<IActionResult> ExecutePayment([FromQuery] string token)
+        {
+            try
+            {
+                var request = new OrdersCaptureRequest(token);
+                request.RequestBody(new OrderActionRequest());
+
+                var response = await PayPalClient.Client().Execute(request);
+                var result = response.Result<Order>();
+
+                // TODO: Update payment status in your DB (e.g., mark it as COMPLETED)
+
+                return Ok(new
+                {
+                    message = "Payment successful!",
+                    details = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Payment execution failed", error = ex.Message });
+            }
+        }
+
+        [HttpGet("ping")]
+        public IActionResult Ping()
+        {
+            return Ok("Pong!");
         }
     }
 }

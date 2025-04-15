@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Payment_Service.Models;
 using Payment_Service.Service;
+using Payment_Service.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+builder.Logging.AddConsole();
 
 
 
@@ -36,8 +38,8 @@ app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 
 
-app.UseRouting();
-app.UseAuthorization();
+//app.UseRouting();
+//app.UseAuthorization();
 app.MapControllers();
 
 //app.UseHttpsRedirection();
@@ -46,5 +48,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+
 
 app.Run();
