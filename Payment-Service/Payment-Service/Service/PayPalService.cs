@@ -28,11 +28,20 @@ namespace Payment_Service.Service
                 {
                     ReturnUrl = returnUrl,
                     CancelUrl = cancelUrl,
-                    BrandName = "Deliveroo Food",
-                    LandingPage = "Billing",
+                    BrandName = "YourBrand",
+                    LandingPage = "LOGIN",
                     UserAction = "PAY_NOW"
                 }
             });
+
+            var response = await PayPalClient.Client().Execute(request);
+            return response.Result<Order>();
+        }
+
+        public async Task<Order> CapturePayment(string token)
+        {
+            var request = new OrdersCaptureRequest(token);
+            request.RequestBody(new OrderActionRequest());
 
             var response = await PayPalClient.Client().Execute(request);
             return response.Result<Order>();
