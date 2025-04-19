@@ -25,30 +25,26 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+        c.RoutePrefix = string.Empty;  // Removes 'index.html' and makes Swagger UI accessible at the root URL
+    });
 }
 
 builder.Logging.AddConsole();
 
-
-
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-//app.UseHttpsRedirection();
-
-
-
-//app.UseRouting();
-//app.UseAuthorization();
+// Configure routing and authorization
+app.UseRouting();
+app.UseAuthorization();
 app.MapControllers();
 
-//app.UseHttpsRedirection();
-
+// Developer exception page for development environment
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
-
-
 
 app.Run();

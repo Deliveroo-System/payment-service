@@ -22,57 +22,61 @@ namespace Payment_Service.Controllers
             _payPalService = payPalService;
         }
 
-        // ✅ Create a generic payment (not linked to any gateway)
+        // ✅ Create Local Payment (used for COD and PayPal)
+        private LocalPayment CreateBasePayment(LocalPayment payment)
+        {
+            payment.OrderId = Guid.NewGuid();
+            payment.UserId = Guid.NewGuid();
+            payment.PaymentStatus = "PENDING";
+            payment.CreatedAt = DateTime.UtcNow;
+            payment.UpdatedAt = DateTime.UtcNow;
+            return payment;
+        }
+
+        // ✅ Generic Payment Creation (Optional)
         [HttpPost("create")]
         public IActionResult CreatePayment([FromBody] LocalPayment payment)
         {
             try
             {
-                payment.OrderId = Guid.NewGuid();
-                payment.UserId = Guid.NewGuid();
-                payment.PaymentStatus = "PENDING";
-                payment.CreatedAt = DateTime.UtcNow;
-                payment.UpdatedAt = DateTime.UtcNow;
-
-                _context.Payments.Add(payment);
+                var newPayment = CreateBasePayment(payment);
+                _context.Payments.Add(newPayment);
                 _context.SaveChanges();
 
-                return Ok(new { message = "Payment created successfully", payment });
+                return Ok(new { message = "Payment created successfully", payment = newPayment });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error while creating payment", error = ex.Message });
+                return StatusCode(500, new { message = "Error creating payment", error = ex.Message });
             }
         }
 
-        // ✅ Pay with PayPal
+        // ✅ PayPal Payment
         [HttpPost("pay/paypal")]
         public async Task<IActionResult> PayWithPayPal([FromBody] LocalPayment payment)
         {
             try
             {
-                payment.OrderId = Guid.NewGuid();
-                payment.UserId = Guid.NewGuid();
-                payment.PaymentStatus = "PENDING";
-                payment.CreatedAt = DateTime.UtcNow;
-                payment.UpdatedAt = DateTime.UtcNow;
-
-                _context.Payments.Add(payment);
+                var newPayment = CreateBasePayment(payment);
+                _context.Payments.Add(newPayment);
                 _context.SaveChanges();
 
-                var paypalOrder = await _payPalService.CreatePayment(payment.TotalAmount, payment.Currency,
+                var paypalOrder = await _payPalService.CreatePayment(
+                    newPayment.TotalAmount,
+                    newPayment.Currency,
                     "http://localhost:5212/api/payments/execute",
-                    "http://localhost:5212/api/payments/cancel");
+                    "http://localhost:5212/api/payments/cancel"
+                );
 
-                var approvalLink = paypalOrder.Links.FirstOrDefault(link => link.Rel == "approve")?.Href;
+                var approvalUrl = paypalOrder.Links.FirstOrDefault(link => link.Rel == "approve")?.Href;
 
                 var paypalTransaction = new PaymentPaypalTransaction
                 {
-                    PaymentId = payment.PaymentId,
+                    PaymentId = newPayment.PaymentId,
                     PayPalTransactionId = paypalOrder.Id,
                     TransactionStatus = "CREATED",
-                    TransactionAmount = payment.TotalAmount,
-                    TransactionCurrency = payment.Currency,
+                    TransactionAmount = newPayment.TotalAmount,
+                    TransactionCurrency = newPayment.Currency,
                     CreatedAt = DateTime.UtcNow
                 };
 
@@ -81,42 +85,31 @@ namespace Payment_Service.Controllers
 
                 return Ok(new
                 {
-                    message = "PayPal payment created. Redirect the user to approval URL.",
-                    approvalUrl = approvalLink,
-                    payment,
+                    message = "PayPal payment created. Redirect user to approval URL.",
+                    approvalUrl,
+                    payment = newPayment,
                     paypalTransaction
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new
-                {
-                    message = "Error while processing PayPal payment",
-                    error = ex.Message,
-                    innerException = ex.InnerException?.Message
-                });
+                return StatusCode(500, new { message = "PayPal payment failed", error = ex.Message, inner = ex.InnerException?.Message });
             }
         }
 
-        // ✅ Pay with Cash on Delivery
+        // ✅ COD Payment
         [HttpPost("pay/cod")]
         public IActionResult PayWithCOD([FromBody] LocalPayment payment)
         {
-            Console.WriteLine("🚀 PayWithPayPal endpoint hit");
             try
             {
-                payment.OrderId = Guid.NewGuid();
-                payment.UserId = Guid.NewGuid();
-                payment.PaymentStatus = "PENDING";
-                payment.CreatedAt = DateTime.UtcNow;
-                payment.UpdatedAt = DateTime.UtcNow;
-
-                _context.Payments.Add(payment);
+                var newPayment = CreateBasePayment(payment);
+                _context.Payments.Add(newPayment);
                 _context.SaveChanges();
 
                 var codTransaction = new PaymentCODTransaction
                 {
-                    PaymentId = payment.PaymentId,
+                    PaymentId = newPayment.PaymentId,
                     CodStatus = "PENDING",
                     CreatedAt = DateTime.UtcNow
                 };
@@ -127,41 +120,40 @@ namespace Payment_Service.Controllers
                 return Ok(new
                 {
                     message = "Cash on Delivery payment initiated",
-                    payment,
+                    payment = newPayment,
                     codTransaction
                 });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new
-                {
-                    message = "Error while processing COD payment",
-                    error = ex.Message,
-                    innerException = ex.InnerException?.Message
-                });
+                return StatusCode(500, new { message = "COD payment failed", error = ex.Message, inner = ex.InnerException?.Message });
             }
-
-           
         }
 
+        // ✅ Execute PayPal Payment
         [HttpGet("execute")]
         public async Task<IActionResult> ExecutePayment([FromQuery] string token)
         {
             try
             {
-                var request = new OrdersCaptureRequest(token);
-                request.RequestBody(new OrderActionRequest());
+                var result = await _payPalService.CapturePayment(token);
+                var transactionId = result.Id;
 
-                var response = await PayPalClient.Client().Execute(request);
-                var result = response.Result<Order>();
-
-                // TODO: Update payment status in your DB (e.g., mark it as COMPLETED)
-
-                return Ok(new
+                var transaction = _context.PaymentPaypalTransactions.FirstOrDefault(t => t.PayPalTransactionId == transactionId);
+                if (transaction != null)
                 {
-                    message = "Payment successful!",
-                    details = result
-                });
+                    transaction.TransactionStatus = "COMPLETED";
+                    var payment = _context.Payments.FirstOrDefault(p => p.PaymentId == transaction.PaymentId);
+                    if (payment != null)
+                    {
+                        payment.PaymentStatus = "COMPLETED";
+                        payment.UpdatedAt = DateTime.UtcNow;
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return Ok(new { message = "PayPal payment executed successfully", result });
             }
             catch (Exception ex)
             {
@@ -169,10 +161,8 @@ namespace Payment_Service.Controllers
             }
         }
 
+        // ✅ Ping
         [HttpGet("ping")]
-        public IActionResult Ping()
-        {
-            return Ok("Pong!");
-        }
+        public IActionResult Ping() => Ok("Pong!");
     }
 }
