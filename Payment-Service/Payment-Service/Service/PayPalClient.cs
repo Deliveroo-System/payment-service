@@ -1,22 +1,24 @@
 ﻿using PayPalCheckoutSdk.Core;
-using PayPalHttp;
+using System;
 
-namespace Payment_Service.Service
+public class PayPalClient
 {
-    public class PayPalClient
-    {
-        public static PayPalEnvironment Environment()
-        {
-            return new SandboxEnvironment(
-                "Aacd_SPuODUux_H7x6evbTSojfds_jToSXaUD4SegYNJE5CM91OWuqbb1-qwkvnEdpMC_YW8zxZGxMdt", 
-                "EFXBHqmf1fwp3WYgvJ6R6a8crw3DyEYsrEaw-JY_RO55UvqcjizyBYw-ylMF2wZX2e_BqP2_HXoAew60" 
-            );
-        }
+    private readonly IConfiguration _config;
 
-        
-        public static PayPalHttp.HttpClient Client()
-        {
-            return new PayPalHttpClient(Environment());
-        }
+    public PayPalClient(IConfiguration config)
+    {
+        _config = config;
+    }
+
+    public PayPalEnvironment Environment()
+    {
+        var clientId = _config["PayPal:ClientId"];
+        var secret = _config["PayPal:Secret"];
+        return new SandboxEnvironment(clientId, secret);
+    }
+
+    public PayPalHttpClient Client()
+    {
+        return new PayPalHttpClient(Environment());
     }
 }
