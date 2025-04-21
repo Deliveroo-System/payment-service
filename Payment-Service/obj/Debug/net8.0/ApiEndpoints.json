@@ -1,6 +1,16 @@
 [
   {
     "ContainingType": "Payment_Service.Controllers.PaymentsController",
+    "Method": "CancelPayment",
+    "RelativePath": "api/payments/cancel",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Payment_Service.Controllers.PaymentsController",
     "Method": "CreatePayment",
     "RelativePath": "api/payments/create",
     "HttpMethod": "POST",
@@ -11,22 +21,6 @@
         "Name": "payment",
         "Type": "Payment_Service.Models.Payment",
         "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Payment_Service.Controllers.PaymentsController",
-    "Method": "ExecutePayment",
-    "RelativePath": "api/payments/execute",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "token",
-        "Type": "System.String",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -65,12 +59,18 @@
   },
   {
     "ContainingType": "Payment_Service.Controllers.PaymentsController",
-    "Method": "Ping",
-    "RelativePath": "api/payments/ping",
+    "Method": "ExecutePayment",
+    "RelativePath": "api/payments/success",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {

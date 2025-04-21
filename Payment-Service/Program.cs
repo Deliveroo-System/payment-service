@@ -10,13 +10,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 builder.Services.AddCors();
 
 // Register DbContext with the appropriate scope (no need for AddScoped separately)
 builder.Services.AddDbContext<PaymentsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register PayPalService for dependency injection
+builder.Services.AddSingleton<PayPalClient>();
 builder.Services.AddScoped<PayPalService>();
 
 var app = builder.Build();
@@ -25,26 +27,30 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
-        c.RoutePrefix = string.Empty;  // Removes 'index.html' and makes Swagger UI accessible at the root URL
-    });
+    app.UseSwaggerUI();
 }
 
 builder.Logging.AddConsole();
 
+
+
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-// Configure routing and authorization
+//app.UseHttpsRedirection();
+
+
+
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
 
-// Developer exception page for development environment
+//app.UseHttpsRedirection();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+
 
 app.Run();
