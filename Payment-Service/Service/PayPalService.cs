@@ -1,71 +1,79 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PayPalCheckoutSdk.Core;
 using PayPalCheckoutSdk.Orders;
-using System;
+using PayPalHttp;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Payment_Service.Service
 {
     public class PayPalService
     {
-        private readonly PayPalEnvironment _environment;
-        private readonly PayPalHttpClient _client;
+        private readonly IConfiguration _config;
 
-        public PayPalService(IConfiguration configuration)
+        public PayPalService(IConfiguration config)
         {
-            var clientId = configuration["PayPal:ClientId"];
-            var clientSecret = configuration["PayPal:ClientSecret"];
-            var mode = configuration["PayPal:Mode"];
-
-            if (string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
-                throw new Exception("PayPal ClientId or ClientSecret not configured");
-
-            _environment = mode?.ToLower() == "live"
-                ? new LiveEnvironment(clientId, clientSecret)
-                : new SandboxEnvironment(clientId, clientSecret);
-
-            _client = new PayPalHttpClient(_environment);
+            _config = config;
         }
 
-        public async Task<Order> CreatePayment(decimal amount, string currency, string returnUrl, string cancelUrl)
+        private PayPalHttpClient GetClient()
+        {
+            var environment = new SandboxEnvironment(
+                _config["PayPal:ClientId"],
+                _config["PayPal:ClientSecret"]
+            );
+
+            return new PayPalHttpClient(environment);
+        }
+
+        public async Task<string> CreateOrder(decimal amount, string currency)
         {
             var request = new OrdersCreateRequest();
             request.Prefer("return=representation");
+
             request.RequestBody(new OrderRequest
             {
                 CheckoutPaymentIntent = "CAPTURE",
-                ApplicationContext = new ApplicationContext
-                {
-                    ReturnUrl = returnUrl,
-                    CancelUrl = cancelUrl,
-                    BrandName = "MyCompany",
-                    LandingPage = "BILLING",
-                    UserAction = "PAY_NOW"
-                },
                 PurchaseUnits = new List<PurchaseUnitRequest>
                 {
                     new PurchaseUnitRequest
                     {
                         AmountWithBreakdown = new AmountWithBreakdown
                         {
-                            CurrencyCode = currency.ToUpper(),
+                            CurrencyCode = currency,
                             Value = amount.ToString("F2")
                         }
                     }
+                },
+                ApplicationContext = new ApplicationContext
+                {
+                    ReturnUrl = "https://example.com/success",  // replace with frontend URL
+                    CancelUrl = "https://example.com/cancel"    // replace with frontend cancel URL
                 }
             });
 
-            var response = await _client.Execute(request);
-            return response.Result<Order>();
+            var response = await GetClient().Execute(request);
+            var result = response.Result<Order>();
+            return result.Id;
         }
 
-        public async Task<Order> CapturePayment(string orderId)
+        public async Task<string> GetApprovalLink(string orderId)
+        {
+            var request = new OrdersGetRequest(orderId);
+            var response = await GetClient().Execute(request);
+            var order = response.Result<Order>();
+            return order.Links.FirstOrDefault(link => link.Rel == "approve")?.Href;
+        }
+
+        public async Task<bool> CaptureOrder(string orderId)
         {
             var request = new OrdersCaptureRequest(orderId);
-            request.RequestBody(new OrderActionRequest()); // Empty body is required
-            var response = await _client.Execute(request);
-            return response.Result<Order>();
+            request.RequestBody(new OrderActionRequest());
+
+            var response = await GetClient().Execute(request);
+            return response.StatusCode == HttpStatusCode.Created;
         }
     }
 }

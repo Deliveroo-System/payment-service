@@ -24,20 +24,18 @@ namespace Payment_Service.Models
 
             modelBuilder.Entity<PaymentPaypalTransaction>()
                 .Property(p => p.TransactionAmount)
-                .HasPrecision(18, 2); 
-
-            modelBuilder.Entity<PaymentCODTransaction>()
-                .ToTable("payment_cod_transactions")  
-                .HasOne(cod => cod.Payment)
-                .WithMany()  
-                .HasForeignKey(cod => cod.PaymentId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasPrecision(18, 2);
 
             modelBuilder.Entity<PaymentPaypalTransaction>()
-                .ToTable("payment_paypal_transactions") 
+                .HasOne(t => t.Payment)
+                .WithMany(p => p.PaypalTransactions)
+                .HasForeignKey(t => t.PaymentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PaymentCODTransaction>()
                 .HasOne(p => p.Payment)
-                .WithMany()
-                .HasForeignKey(p => p.PaymentId)
+                .WithOne(p => p.CodTransaction)
+                .HasForeignKey<PaymentCODTransaction>(p => p.PaymentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
         }
