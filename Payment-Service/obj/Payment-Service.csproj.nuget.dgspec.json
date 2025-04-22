@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Payment-Service\\Payment-Service.csproj": {}
+    "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Payment-Service.csproj": {}
   },
   "projects": {
-    "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Payment-Service\\Payment-Service.csproj": {
+    "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Payment-Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Payment-Service\\Payment-Service.csproj",
+        "projectUniqueName": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Payment-Service.csproj",
         "projectName": "Payment-Service",
-        "projectPath": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Payment-Service\\Payment-Service.csproj",
+        "projectPath": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Payment-Service.csproj",
         "packagesPath": "C:\\Users\\hp\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Payment-Service\\obj\\",
+        "outputPath": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
