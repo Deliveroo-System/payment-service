@@ -37,7 +37,8 @@ namespace Payment_Service.Models
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [ForeignKey("PaymentId")]
+        [InverseProperty(nameof(Payment.PaypalTransactions))]
         public Payment Payment { get; set; }
     }
+
 }
