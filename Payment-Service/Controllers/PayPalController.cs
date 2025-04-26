@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Payment_Service.Models;
 using Payment_Service.Service;
 using System.Threading.Tasks;
 
@@ -16,12 +17,9 @@ namespace Payment_Service.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateOrder()
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
         {
-            decimal amount = 10.00m; // Or receive it from the frontend
-            string currency = "USD";
-
-            var orderId = await _payPalService.CreateOrder(amount, currency);
+            var orderId = await _payPalService.CreateOrder(request.Amount, request.Currency);
             var approvalLink = await _payPalService.GetApprovalLink(orderId);
 
             return Ok(new
