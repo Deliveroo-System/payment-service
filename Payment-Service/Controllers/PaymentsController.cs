@@ -26,9 +26,9 @@ namespace Payment_Service.Controllers
         {
             try
             {
-                // Dummy data generation for orderId and userId
-                Guid orderId = Guid.NewGuid();  // Use Guid instead of string
-                Guid userId = Guid.NewGuid();   // Use Guid instead of string
+               
+                Guid orderId = Guid.NewGuid(); 
+                Guid userId = Guid.NewGuid(); 
 
                 // Simulate PayPal order creation
                 var paymentId = Guid.NewGuid();
