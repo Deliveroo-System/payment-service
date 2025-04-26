@@ -70,7 +70,13 @@
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Payment_Service.Models.CreateOrderRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
