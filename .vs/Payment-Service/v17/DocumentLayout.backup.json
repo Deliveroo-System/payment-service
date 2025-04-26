@@ -5,46 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\controllers\\paymentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\controllers\\paymentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\models\\codpaymentrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\models\\codpaymentrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\service\\paypalservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\service\\paypalservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\controllers\\paypalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\controllers\\paypalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\models\\paymentcodtransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\models\\paymentcodtransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\models\\paymentpaypaltransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\models\\paymentpaypaltransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\models\\paypalpaymentrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\models\\paypalpaymentrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\models\\paymentsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\models\\paymentsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\models\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\models\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|c:\\users\\hp\\desktop\\payment-service\\payment-service\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{78338702-28C1-4DD3-A089-FA0BCFCE9548}|Payment-Service\\Payment-Service.csproj|solutionrelative:payment-service\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -65,150 +25,16 @@
               "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "PaypalPaymentRequest.cs",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\PaypalPaymentRequest.cs",
-              "RelativeDocumentMoniker": "Payment-Service\\Models\\PaypalPaymentRequest.cs",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\PaypalPaymentRequest.cs",
-              "RelativeToolTip": "Payment-Service\\Models\\PaypalPaymentRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:43:23.946Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "PaymentsDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\PaymentsDbContext.cs",
-              "RelativeDocumentMoniker": "Payment-Service\\Models\\PaymentsDbContext.cs",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\PaymentsDbContext.cs",
-              "RelativeToolTip": "Payment-Service\\Models\\PaymentsDbContext.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAuwBwAAAA7AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:17:41.467Z",
-              "EditorCaption": ""
-            },
-            {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "PaymentsController.cs",
               "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Controllers\\PaymentsController.cs",
               "RelativeDocumentMoniker": "Payment-Service\\Controllers\\PaymentsController.cs",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Controllers\\PaymentsController.cs*",
-              "RelativeToolTip": "Payment-Service\\Controllers\\PaymentsController.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEsAAAAIAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Controllers\\PaymentsController.cs",
+              "RelativeToolTip": "Payment-Service\\Controllers\\PaymentsController.cs",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAIwIUAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T15:03:18.098Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "PayPalService.cs",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Service\\PayPalService.cs",
-              "RelativeDocumentMoniker": "Payment-Service\\Service\\PayPalService.cs",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Service\\PayPalService.cs",
-              "RelativeToolTip": "Payment-Service\\Service\\PayPalService.cs",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAAAE8AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T15:15:15.214Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CodPaymentRequest.cs",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\CodPaymentRequest.cs",
-              "RelativeDocumentMoniker": "Payment-Service\\Models\\CodPaymentRequest.cs",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\CodPaymentRequest.cs",
-              "RelativeToolTip": "Payment-Service\\Models\\CodPaymentRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:10:26.392Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "PayPalController.cs",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Controllers\\PayPalController.cs",
-              "RelativeDocumentMoniker": "Payment-Service\\Controllers\\PayPalController.cs",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Controllers\\PayPalController.cs",
-              "RelativeToolTip": "Payment-Service\\Controllers\\PayPalController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAA0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T17:24:53.935Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\appsettings.json",
-              "RelativeDocumentMoniker": "Payment-Service\\appsettings.json",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\appsettings.json",
-              "RelativeToolTip": "Payment-Service\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-22T15:09:48.958Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "PaymentPaypalTransaction.cs",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\PaymentPaypalTransaction.cs",
-              "RelativeDocumentMoniker": "Payment-Service\\Models\\PaymentPaypalTransaction.cs",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\PaymentPaypalTransaction.cs",
-              "RelativeToolTip": "Payment-Service\\Models\\PaymentPaypalTransaction.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAuwCoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:02:21.208Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "PaymentCODTransaction.cs",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\PaymentCODTransaction.cs",
-              "RelativeDocumentMoniker": "Payment-Service\\Models\\PaymentCODTransaction.cs",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\PaymentCODTransaction.cs",
-              "RelativeToolTip": "Payment-Service\\Models\\PaymentCODTransaction.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T16:06:02.934Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Payment.cs",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\Payment.cs",
-              "RelativeDocumentMoniker": "Payment-Service\\Models\\Payment.cs",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\Models\\Payment.cs",
-              "RelativeToolTip": "Payment-Service\\Models\\Payment.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-22T15:03:11.113Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "Payment-Service\\appsettings.Development.json",
-              "ToolTip": "C:\\Users\\hp\\Desktop\\payment-service\\Payment-Service\\appsettings.Development.json",
-              "RelativeToolTip": "Payment-Service\\appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-22T15:18:21.028Z",
+              "WhenOpened": "2025-04-26T08:04:03.737Z",
               "EditorCaption": ""
             }
           ]
